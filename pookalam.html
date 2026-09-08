@@ -1268,51 +1268,71 @@
                             Select items & contribution:</h3>
 
                         <div class="option-list">
-                            <!-- Item 1: Pookalam Minimum Contribution -->
-                            <label class="option-item checked disabled">
+                            <!-- Item 1: Pookalam Contribution (Minimum ₹30 with Custom Input) -->
+                            <div class="option-item checked disabled" id="item-pookalam">
                                 <div class="option-checkbox">
-                                    <input type="checkbox" class="contrib-check" data-price="30" checked disabled>
+                                    <input type="checkbox" checked disabled>
                                     <span class="checkmark">✓</span>
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
-                                        <h4>Pookalam Contribution <span class="badge-req">Minimum</span></h4>
-                                        <span class="option-price">₹30</span>
+                                        <h4>Pookalam Contribution <span class="badge-req">Min ₹30</span></h4>
+                                        <div class="amt-input-wrap" style="display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.4); border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 10px;">
+                                            <span style="color: var(--gold-light); font-weight: 700; font-size: 16px;">₹</span>
+                                            <input type="number" id="pookalam-amt-input" value="30" min="30" step="10" title="Minimum contribution is ₹30" style="width: 70px; background: transparent; border: none; color: var(--gold-light); font-weight: 700; font-size: 16px; font-family: 'Karla', sans-serif; outline: none;">
+                                        </div>
                                     </div>
-                                    <p>Base contribution for sourcing marigolds, leaves & colors for our pookalam.</p>
+                                    <p>Base contribution for flowers & materials. Enter any higher amount if you wish!</p>
                                 </div>
-                            </label>
+                            </div>
 
-                            <!-- Item 2: White Mullapoo -->
-                            <label class="option-item">
+                            <!-- Item 2: White Mullapoo (With Quantity Counter) -->
+                            <div class="option-item" id="item-mullapoo">
                                 <div class="option-checkbox">
-                                    <input type="checkbox" class="contrib-check" data-price="30">
+                                    <input type="checkbox" id="check-mullapoo">
                                     <span class="checkmark">✓</span>
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
                                         <h4>White Mullapoo (Jasmine Strand)</h4>
-                                        <span class="option-price">₹30</span>
+                                        <span class="option-price" id="price-mullapoo">₹30</span>
                                     </div>
-                                    <p>A strand of fresh jasmine to wear, ready on judging day (preferably for girls &
-                                        women).</p>
+                                    <p>A strand of fresh jasmine to wear on judging day (preferably for girls & women).</p>
+                                    
+                                    <div class="counter-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
+                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹30 each):</span>
+                                        <div class="qty-counter" style="display: flex; align-items: center; gap: 8px;">
+                                            <button type="button" class="qty-btn" id="btn-mullapoo-minus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                                            <span class="qty-count" id="count-mullapoo" style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
+                                            <button type="button" class="qty-btn" id="btn-mullapoo-plus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </label>
+                            </div>
 
-                            <!-- Item 3: Payasam -->
-                            <label class="option-item">
+                            <!-- Item 3: Bowl of Payasam (With Quantity Counter) -->
+                            <div class="option-item" id="item-payasam">
                                 <div class="option-checkbox">
-                                    <input type="checkbox" class="contrib-check" data-price="40">
+                                    <input type="checkbox" id="check-payasam">
                                     <span class="checkmark">✓</span>
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
                                         <h4>Bowl of Payasam</h4>
-                                        <span class="option-price">₹40</span>
+                                        <span class="option-price" id="price-payasam">₹40</span>
                                     </div>
                                     <p>A fresh bowl of sweet payasam for you once the pookalam is laid and judged.</p>
+                                    
+                                    <div class="counter-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
+                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹40 each):</span>
+                                        <div class="qty-counter" style="display: flex; align-items: center; gap: 8px;">
+                                            <button type="button" class="qty-btn" id="btn-payasam-minus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                                            <span class="qty-count" id="count-payasam" style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
+                                            <button type="button" class="qty-btn" id="btn-payasam-plus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </label>
+                            </div>
                         </div>
 
                         <!-- Live Total Display -->
@@ -1855,30 +1875,138 @@
         executeCinematicSequence();
 
 
-        // ================= CONTRIBUTION CALCULATOR =================
-        const contribChecks = document.querySelectorAll('.contrib-check');
-        const totalDisplay = document.getElementById('total-amount-display');
-        const summaryAmount = document.getElementById('summary-amount');
+        // ================= CONTRIBUTION CALCULATOR & COUNTERS =================
+        const pookalamInput = document.getElementById("pookalam-amt-input");
+        
+        const checkMullapoo = document.getElementById("check-mullapoo");
+        const countMullapoo = document.getElementById("count-mullapoo");
+        const priceMullapoo = document.getElementById("price-mullapoo");
+        const btnMullapooMinus = document.getElementById("btn-mullapoo-minus");
+        const btnMullapooPlus = document.getElementById("btn-mullapoo-plus");
+        const itemMullapoo = document.getElementById("item-mullapoo");
 
-        function updateTotal() {
-            let total = 0;
-            contribChecks.forEach(check => {
-                const item = check.closest('.option-item');
-                if (check.checked) {
-                    total += parseInt(check.dataset.price || '0', 10);
-                    item?.classList.add('checked');
-                } else {
-                    item?.classList.remove('checked');
-                }
-            });
-            if (totalDisplay) totalDisplay.textContent = `₹${total}`;
-            if (summaryAmount) summaryAmount.textContent = `₹${total}`;
+        const checkPayasam = document.getElementById("check-payasam");
+        const countPayasam = document.getElementById("count-payasam");
+        const pricePayasam = document.getElementById("price-payasam");
+        const btnPayasamMinus = document.getElementById("btn-payasam-minus");
+        const btnPayasamPlus = document.getElementById("btn-payasam-plus");
+        const itemPayasam = document.getElementById("item-payasam");
+
+        const totalDisplay = document.getElementById("total-amount-display");
+        const summaryAmount = document.getElementById("summary-amount");
+
+        let mullapooQty = 0;
+        let payasamQty = 0;
+
+        function updateCartTotal() {
+            // Pookalam base contribution (min 30)
+            let pookalamAmt = parseInt(pookalamInput?.value || "30", 10);
+            if (isNaN(pookalamAmt) || pookalamAmt < 30) {
+                pookalamAmt = 30;
+            }
+
+            // Mullapoo
+            let mullapooTotal = 0;
+            if (checkMullapoo && checkMullapoo.checked) {
+                if (mullapooQty === 0) mullapooQty = 1;
+                mullapooTotal = mullapooQty * 30;
+                itemMullapoo?.classList.add("checked");
+            } else {
+                mullapooQty = 0;
+                itemMullapoo?.classList.remove("checked");
+            }
+            if (countMullapoo) countMullapoo.textContent = mullapooQty;
+            if (priceMullapoo) priceMullapoo.textContent = `₹${mullapooQty > 0 ? mullapooTotal : 30}`;
+
+            // Payasam
+            let payasamTotal = 0;
+            if (checkPayasam && checkPayasam.checked) {
+                if (payasamQty === 0) payasamQty = 1;
+                payasamTotal = payasamQty * 40;
+                itemPayasam?.classList.add("checked");
+            } else {
+                payasamQty = 0;
+                itemPayasam?.classList.remove("checked");
+            }
+            if (countPayasam) countPayasam.textContent = payasamQty;
+            if (pricePayasam) pricePayasam.textContent = `₹${payasamQty > 0 ? payasamTotal : 40}`;
+
+            // Overall Total
+            const grandTotal = pookalamAmt + mullapooTotal + payasamTotal;
+            if (totalDisplay) totalDisplay.textContent = `₹${grandTotal}`;
+            if (summaryAmount) summaryAmount.textContent = `₹${grandTotal}`;
         }
 
-        contribChecks.forEach(check => {
-            check.addEventListener('change', updateTotal);
-        });
-        updateTotal();
+        // Pookalam Custom Input Event
+        if (pookalamInput) {
+            pookalamInput.addEventListener("input", updateCartTotal);
+            pookalamInput.addEventListener("blur", function() {
+                if (parseInt(this.value, 10) < 30 || isNaN(parseInt(this.value, 10))) {
+                    this.value = 30;
+                    updateCartTotal();
+                }
+            });
+        }
+
+        // Mullapoo Controls
+        if (btnMullapooPlus) {
+            btnMullapooPlus.addEventListener("click", function(e) {
+                e.preventDefault();
+                mullapooQty++;
+                if (checkMullapoo) checkMullapoo.checked = true;
+                updateCartTotal();
+            });
+        }
+        if (btnMullapooMinus) {
+            btnMullapooMinus.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (mullapooQty > 1) {
+                    mullapooQty--;
+                } else if (mullapooQty === 1) {
+                    mullapooQty = 0;
+                    if (checkMullapoo) checkMullapoo.checked = false;
+                }
+                updateCartTotal();
+            });
+        }
+        if (checkMullapoo) {
+            checkMullapoo.addEventListener("change", function() {
+                if (this.checked && mullapooQty === 0) mullapooQty = 1;
+                if (!this.checked) mullapooQty = 0;
+                updateCartTotal();
+            });
+        }
+
+        // Payasam Controls
+        if (btnPayasamPlus) {
+            btnPayasamPlus.addEventListener("click", function(e) {
+                e.preventDefault();
+                payasamQty++;
+                if (checkPayasam) checkPayasam.checked = true;
+                updateCartTotal();
+            });
+        }
+        if (btnPayasamMinus) {
+            btnPayasamMinus.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (payasamQty > 1) {
+                    payasamQty--;
+                } else if (payasamQty === 1) {
+                    payasamQty = 0;
+                    if (checkPayasam) checkPayasam.checked = false;
+                }
+                updateCartTotal();
+            });
+        }
+        if (checkPayasam) {
+            checkPayasam.addEventListener("change", function() {
+                if (this.checked && payasamQty === 0) payasamQty = 1;
+                if (!this.checked) payasamQty = 0;
+                updateCartTotal();
+            });
+        }
+
+        updateCartTotal();
 
         // ================= PAYMENT VERIFICATION FORM LOGIC =================
         const paymentForm = document.getElementById("payment-verify-form");
