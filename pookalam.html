@@ -299,12 +299,13 @@
 
         .cinematic-ready {
             opacity: 1 !important;
-            pointer-events: auto;
+            pointer-events: auto !important;
             transform: translateY(0) !important;
         }
 
         nav.cinematic-ready {
             transform: translateX(-50%) !important;
+            pointer-events: auto !important;
         }
 
         .delay-reveal {
@@ -513,6 +514,7 @@
         section {
             padding: 120px 0;
             position: relative;
+            scroll-margin-top: 90px;
         }
 
         .section-head {
@@ -1168,7 +1170,7 @@
                         small, tired, stubborn crew. This year we want the whole neighbourhood on the ground with us.
                     </p>
                     <div class="hero-actions">
-                        <a href="#story" class="btn btn-primary">See last year's story</a>
+                        <a href="#story" id="see-story-btn" onclick="event.preventDefault(); document.getElementById('story')?.scrollIntoView({behavior: 'smooth', block: 'start'});" class="btn btn-primary">See last year's story</a>
                     </div>
                 </div>
             </div>
@@ -1756,8 +1758,11 @@
         // Graceful reveal of website if the video finishes or fails
         function revealWebsite() {
             console.log("Revealing website");
-            cinematicIntro.classList.add("hide");
-            cinematicElements.forEach(el => el.classList.add("cinematic-ready"));
+            if (cinematicIntro) cinematicIntro.classList.add("hide");
+            document.querySelectorAll(".cinematic-hidden").forEach(el => {
+                el.classList.remove("cinematic-hidden");
+                el.classList.add("cinematic-ready");
+            });
         }
 
         async function executeCinematicSequence() {
