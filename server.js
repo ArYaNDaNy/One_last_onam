@@ -15,6 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
+// Serve index.html at root
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const COLUMNS = [
     { header: 'Timestamp', key: 'timestamp', width: 22 },
     { header: 'name', key: 'name', width: 25 },
