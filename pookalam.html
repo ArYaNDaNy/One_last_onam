@@ -587,9 +587,7 @@
             background: transparent;
             border: 3px solid #D6A43A;
             border-radius: 18px;
-
             height: 100%;
-
             display: flex;
             align-items: center;
             justify-content: center;
@@ -754,158 +752,6 @@
             color: var(--gold-light);
             min-width: 70px;
             text-align: center;
-        }
-
-        /* ================= THIS YEAR ================= */
-        #thisyear {
-            background: var(--maroon-accent);
-            position: relative;
-            border-top: 1px solid rgba(214, 164, 58, 0.05);
-        }
-
-        .signup-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
-        }
-
-        .role-list {
-            list-style: none;
-            padding: 0;
-            margin: 32px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .role-list li {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(214, 164, 58, 0.15);
-            border-radius: 16px;
-            font-size: 16px;
-            color: var(--cream);
-            transition: transform 0.3s ease;
-        }
-
-        .role-list li:hover {
-            transform: translateX(8px);
-            border-color: rgba(214, 164, 58, 0.4);
-        }
-
-        .role-list .icon-circle {
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-        }
-
-        form {
-            background: rgba(22, 2, 5, 0.6);
-            border: 1px solid rgba(214, 164, 58, 0.2);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            position: relative;
-        }
-
-        form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--maroon-deep), var(--gold), var(--primary-maroon));
-            border-radius: 24px 24px 0 0;
-        }
-
-        .field {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--gold-light);
-        }
-
-        input[type=text],
-        input[type=tel],
-        input[type=number] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid rgba(214, 164, 58, 0.3);
-            border-radius: 12px;
-            font-size: 16px;
-            font-family: 'Karla', sans-serif;
-            background: rgba(0, 0, 0, 0.3);
-            color: #fff;
-            transition: all 0.2s ease;
-        }
-
-        input:focus {
-            border-color: var(--gold);
-            outline: none;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        .checks {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .chip input {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .chip label {
-            display: inline-block;
-            padding: 10px 20px;
-            border: 1px solid rgba(214, 164, 58, 0.3);
-            border-radius: 999px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--cream-muted);
-            margin: 0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .chip input:checked+label {
-            background: var(--gold);
-            color: var(--maroon-deep);
-            border-color: var(--gold);
-        }
-
-        .form-msg {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(63, 107, 53, 0.2);
-            border: 1px solid rgba(63, 107, 53, 0.4);
-            border-radius: 12px;
-            font-size: 15px;
-            color: #a2db95;
-            font-weight: 600;
-            display: none;
-        }
-
-        .form-msg.show {
-            display: block;
-            animation: fadeUp 0.4s ease;
         }
 
         /* ================= GIVE ================= */
@@ -1179,8 +1025,7 @@
                 <div class="brand"><svg class="mini-flower" viewBox="0 0 100 100"></svg>Pookalam <span>2026</span></div>
                 <div class="navlinks">
                     <a href="#story">Last year</a>
-                    <a href="#thisyear">This year</a>
-                    <a href="#give">Give</a>
+                    <a href="#give">Contribute</a>
                 </div>
             </div>
         </nav>
@@ -1202,7 +1047,6 @@
                     </p>
                     <div class="hero-actions">
                         <a href="#story" class="btn btn-primary">See last year's story</a>
-                        <a href="#thisyear" class="btn btn-outline">Join this year</a>
                     </div>
                 </div>
             </div>
@@ -1273,58 +1117,6 @@
             </div>
         </section>
 
-        <section id="thisyear" class="cinematic-hidden">
-            <div class="wrap">
-                <div class="section-head">
-                    <svg class="eyebrow-flower" viewBox="0 0 100 100" data-flower="marigold"></svg>
-                    <h2>This year, more hands, more flowers</h2>
-                    <p>We're opening it up wider — you don't need experience, just an hour or two to spare over Onam
-                        week.</p>
-                </div>
-                <div class="signup-box">
-                    <div>
-                        <p style="color:var(--text-secondary); font-size: 18px; font-weight: 500;">Whatever you're free
-                            for, there's a place in it:</p>
-                        <ul class="role-list">
-                            <li><svg class="icon-circle" viewBox="0 0 100 100" data-role="lay"></svg>Laying flowers — no
-                                design experience needed</li>
-                            <li><svg class="icon-circle" viewBox="0 0 100 100" data-role="source"></svg>Sourcing and
-                                sorting — prep the day before</li>
-                            <li><svg class="icon-circle" viewBox="0 0 100 100" data-role="spread"></svg>Spreading the
-                                word — building momentum</li>
-                            <li><svg class="icon-circle" viewBox="0 0 100 100" data-role="give"></svg>Contributing —
-                                chipping in for flowers</li>
-                        </ul>
-                    </div>
-                    <form id="signup-form">
-                        <div class="field">
-                            <label for="name">Your name</label>
-                            <input type="text" id="name" required placeholder="e.g. Anjali Menon">
-                        </div>
-                        <div class="field">
-                            <label for="phone">WhatsApp / phone number</label>
-                            <input type="tel" id="phone" required placeholder="e.g. 98765 43210">
-                        </div>
-                        <div class="field">
-                            <label>What would you like to help with?</label>
-                            <div class="checks">
-                                <div class="chip"><input type="checkbox" id="c1" value="laying"><label for="c1">Laying
-                                        flowers</label></div>
-                                <div class="chip"><input type="checkbox" id="c2" value="sourcing"><label
-                                        for="c2">Sourcing / sorting</label></div>
-                                <div class="chip"><input type="checkbox" id="c3" value="spreading"><label
-                                        for="c3">Spreading the word</label></div>
-                                <div class="chip"><input type="checkbox" id="c4" value="giving"><label
-                                        for="c4">Contributing</label></div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%;">Count me in</button>
-                        <div class="form-msg" id="signup-msg">Thank you — we'll message you on WhatsApp.</div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
         <section id="give" class="cinematic-hidden">
             <div class="wrap">
                 <div class="section-head">
@@ -1341,7 +1133,7 @@
                             <div class="reward">
                                 <div class="icon"><svg viewBox="0 0 100 100" data-flower="jasmine"></svg></div>
                                 <div>
-                                    <h3>White mullapoo, for girls and women who give</h3>
+                                    <h3>White mullapoo, for girls and women</h3>
                                     <p>A strand of fresh jasmine to wear, ready for you to collect on judging day.</p>
                                 </div>
                             </div>
@@ -1360,23 +1152,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="give-card">
-                        <label style="margin-bottom:12px; font-size: 16px;">Choose an amount</label>
-                        <div class="amounts" id="amounts">
-                            <button class="amt" data-amt="50">₹50</button>
-                            <button class="amt" data-amt="101">₹101</button>
-                            <button class="amt" data-amt="251">₹251</button>
-                            <button class="amt" data-amt="501">₹501</button>
+                    <div class="give-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 36px 28px;">
+                        <h3 style="font-family: 'Fraunces', serif; font-size: 24px; color: var(--gold-light); margin: 0;">Scan & Contribute</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Scan using GPay, PhonePe, Paytm, or any UPI App</p>
+                        
+                        <div class="qr-wrapper" style="background: #ffffff; padding: 14px; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 12px 32px rgba(0,0,0,0.4); margin: 8px 0;">
+                            <img src="qr-code.png" alt="Scan to pay via UPI" style="width: 220px; height: 220px; display: block; border-radius: 10px; object-fit: contain;">
                         </div>
-                        <div class="custom-row">
-                            <span>₹</span>
-                            <input type="number" id="custom-amt" placeholder="Or enter your own amount" min="1">
-                        </div>
-                        <div class="upi-box">
+
+                        <div class="upi-box" style="width: 100%; margin-top: 4px;">
                             <div>
-                                <div
-                                    style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;font-weight:600;">
-                                    Pay by UPI to</div>
+                                <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; font-weight:600;">Pay by UPI to</div>
                                 <div class="upi-id" id="upi-id">pookalam2026@upi</div>
                             </div>
                             <button class="copy-btn" id="copy-upi">Copy UPI ID</button>
@@ -1857,33 +1643,43 @@
         executeCinematicSequence();
 
 
-        // ================= EXISTING UI INTERACTIONS =================
-        document.getElementById("signup-form").addEventListener("submit", function (e) {
-            e.preventDefault();
-            document.getElementById("signup-msg").classList.add("show");
-            this.querySelector("button[type=submit]").textContent = "Thanks, you're on the list!";
-        });
+        // ================= UI INTERACTIONS (WITH SAFE NULL CHECKS) =================
+        const signupForm = document.getElementById("signup-form");
+        if (signupForm) {
+            signupForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                document.getElementById("signup-msg")?.classList.add("show");
+                this.querySelector("button[type=submit]").textContent = "Thanks, you're on the list!";
+            });
+        }
 
         const amountBtns = document.querySelectorAll(".amt");
         const customInput = document.getElementById("custom-amt");
-        amountBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
+        if (amountBtns.length) {
+            amountBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    amountBtns.forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+                    if (customInput) customInput.value = "";
+                });
+            });
+        }
+        if (customInput) {
+            customInput.addEventListener("input", () => {
                 amountBtns.forEach(b => b.classList.remove("selected"));
-                btn.classList.add("selected");
-                customInput.value = "";
             });
-        });
-        customInput.addEventListener("input", () => {
-            amountBtns.forEach(b => b.classList.remove("selected"));
-        });
+        }
 
-        document.getElementById("copy-upi").addEventListener("click", function () {
-            const id = document.getElementById("upi-id").textContent;
-            navigator.clipboard?.writeText(id).then(() => {
-                this.textContent = "Copied!";
-                setTimeout(() => { this.textContent = "Copy UPI ID"; }, 2000);
+        const copyUpi = document.getElementById("copy-upi");
+        if (copyUpi) {
+            copyUpi.addEventListener("click", function () {
+                const id = document.getElementById("upi-id")?.textContent || '';
+                navigator.clipboard?.writeText(id).then(() => {
+                    this.textContent = "Copied!";
+                    setTimeout(() => { this.textContent = "Copy UPI ID"; }, 2000);
+                });
             });
-        });
+        }
 
         // ================= FAN GALLERY CAROUSEL =================
         (function initFanGallery() {
