@@ -1909,14 +1909,15 @@
         /* ================= CART, CHECKBOX & PAYMENT VERIFICATION STYLES ================= */
         .give-grid {
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 1fr 1fr;
             gap: 36px;
-            align-items: start;
+            align-items: stretch;
         }
 
         @media (max-width: 900px) {
             .give-grid {
                 grid-template-columns: 1fr;
+                gap: 28px;
             }
         }
 
@@ -1926,6 +1927,11 @@
             border-radius: 24px;
             padding: 32px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            box-sizing: border-box;
         }
 
         .option-list {
@@ -2079,36 +2085,43 @@
             background: rgba(22, 2, 5, 0.85);
             border: 1px solid rgba(214, 164, 58, 0.25);
             border-radius: 24px;
+            padding: 32px 28px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            box-sizing: border-box;
         }
 
         .upi-box {
             background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
             border: 1px solid rgba(214, 164, 58, 0.15);
+            box-sizing: border-box;
         }
 
         .upi-id {
             font-family: 'Karla', monospace;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--gold-light);
             letter-spacing: 0.02em;
         }
 
         .copy-btn {
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
             border: 1px solid var(--gold);
             background: transparent;
             color: var(--gold-light);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -2119,26 +2132,9 @@
             color: #ffffff;
         }
 
-        /* Payment Verification Form */
-        .payment-verify-container {
-            grid-column: 1 / -1;
-            margin-top: 36px;
-            background: rgba(22, 2, 5, 0.85);
-            border: 1px solid rgba(214, 164, 58, 0.3);
-            border-radius: 24px;
-            padding: 32px 36px;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
-        }
-
-        .payment-verify-container input:focus {
+        .give-card #payment-verify-form input:focus {
             border-color: var(--gold) !important;
             box-shadow: 0 0 12px rgba(214, 164, 58, 0.3) !important;
-        }
-
-        @media (max-width: 750px) {
-            #payment-verify-form {
-                grid-template-columns: 1fr !important;
-            }
         }
     </style>
 </head>
@@ -2210,10 +2206,8 @@
             <div class="wrap cinematic-hidden delay-reveal">
                 <div class="hero-text-backing">
                     <div class="mal-greeting">Onam Ashamsakal</div>
-                    <h1 class="massive-greeting">This Onam, we lay our biggest pookalam yet</h1>
-                    <p class="lede">Every petal is placed by hand, by whoever shows up. Last year we did it with a
-                        small, tired, stubborn crew. This year we want the whole neighbourhood on the ground with us.
-                    </p>
+                    <h1 class="massive-greeting">This Onam, <br>we take it to next level</h1>
+                    <p class="lede">Computers Department lays its biggest Pookalam yet</p>
                     <div class="hero-actions">
                         <a href="#story" class="btn btn-primary" id="see-story-btn">See last year's story</a>
 
@@ -2336,7 +2330,7 @@
                     <!-- Layer 1: Last Year's Captain (2024) -->
                     <div class="captain-card captain-past">
                         <div class="captain-badge-row">
-                            <span class="captain-tag tag-past">🏆 2024 Captain &bull; 1st Prize Victory</span>
+                            <span class="captain-tag tag-past">🏆 2024 Captain &bull; 1st Prize Winner</span>
                         </div>
                         <div class="captain-content">
                             <div class="captain-avatar-ring">
@@ -2349,7 +2343,8 @@
                                 <h3 class="captain-name">Joaquin Victor</h3>
                                 <div class="captain-role">Pookalam Captain &bull; 2024</div>
                                 <blockquote class="captain-quote">
-                                    "Led our 10-person dawn rush at Dadar market to craft the award-winning 10-foot
+                                    "Early in the morning 2 of us went to Dadar market to craft the award-winning
+                                    10-foot
                                     peacock pookalam."
                                 </blockquote>
                             </div>
@@ -2422,7 +2417,7 @@
                             <div
                                 style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--gold-light);">
                                 <span style="font-size: 18px;">✨</span>
-                                <span><strong style="color: #ffffff;">Payasam &amp; Mullapoo:</strong> Open for
+                                <span><strong style="color: #ffffff;">Payasam &amp; Mullapoo(Gajra):</strong> Open for
                                     <strong>all departments</strong>!</span>
                             </div>
                             <div
@@ -2466,7 +2461,7 @@
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
-                                        <h4>White Mullapoo (Jasmine Strand)</h4>
+                                        <h4>White Mullapoo (Gajra)</h4>
                                         <span class="option-price" id="price-mullapoo">₹30</span>
                                     </div>
                                     <p>A strand of fresh jasmine to wear on judging day (preferably for girls & women).
@@ -2496,7 +2491,7 @@
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
-                                        <h4>Bowl of Payasam</h4>
+                                        <h4>Bowl of Palada Payasam(Kheer)</h4>
                                         <span class="option-price" id="price-payasam">₹40</span>
                                     </div>
                                     <p>A fresh bowl of sweet payasam for you once the pookalam is laid and judged.</p>
@@ -2525,77 +2520,52 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: QR Code Card -->
-                    <div class="give-card"
-                        style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 36px 28px;">
-                        <h3
-                            style="font-family: 'Fraunces', serif; font-size: 24px; color: var(--gold-light); margin: 0;">
-                            Scan & Pay</h3>
-                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Scan using GPay, PhonePe,
-                            Paytm, or any UPI App</p>
-
-                        <div class="qr-wrapper"
-                            style="background: #ffffff; padding: 14px; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 12px 32px rgba(0,0,0,0.4); margin: 4px 0;">
-                            <img src="qr-code.png" alt="Scan to pay via UPI"
-                                style="width: 210px; height: 210px; display: block; border-radius: 10px; object-fit: contain;">
+                    <!-- Right Column: Scan & Pay + Verification Form -->
+                    <div class="give-card">
+                        <div style="text-align: center;">
+                            <h3 style="font-family: 'Fraunces', serif; font-size: 22px; color: var(--gold-light); margin: 0 0 6px;">Scan &amp; Pay</h3>
+                            <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Scan using GPay, PhonePe, Paytm, or any UPI App</p>
                         </div>
 
-                        <div class="total-summary-badge"
-                            style="background: rgba(214, 164, 58, 0.15); border: 1px solid var(--gold); padding: 8px 18px; border-radius: 999px; font-weight: 700; color: var(--gold-light); font-size: 15px;">
-                            Amount to enter: <span id="summary-amount"
-                                style="color:#ffffff; font-weight: 800;">₹30</span>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 12px 0;">
+                            <div class="qr-wrapper" style="background: #ffffff; padding: 10px; border-radius: 16px; border: 2px solid var(--gold); box-shadow: 0 10px 24px rgba(0,0,0,0.4);">
+                                <img src="qr-code.png" alt="Scan to pay via UPI" style="width: 175px; height: 175px; display: block; border-radius: 8px; object-fit: contain;">
+                            </div>
+                            <div class="total-summary-badge" style="background: rgba(214, 164, 58, 0.15); border: 1px solid var(--gold); padding: 6px 18px; border-radius: 999px; font-weight: 700; color: var(--gold-light); font-size: 14px;">
+                                Amount to enter: <span id="summary-amount" style="color:#ffffff; font-weight: 800;">₹30</span>
+                            </div>
                         </div>
 
-                        <div class="upi-box" style="width: 100%; margin-top: 4px;">
+                        <div class="upi-box" style="width: 100%; margin-bottom: 16px;">
                             <div>
-                                <div
-                                    style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; font-weight:600;">
-                                    Pay by UPI to</div>
+                                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 2px; font-weight: 600;">Pay by UPI to</div>
                                 <div class="upi-id" id="upi-id">9562375372@pthdfc</div>
                             </div>
-                            <button class="copy-btn" id="copy-upi">Copy UPI ID</button>
+                            <button class="copy-btn" id="copy-upi" type="button">Copy UPI ID</button>
                         </div>
-                    </div>
 
-                    <!-- Payment Verification Form (Below Cart & QR Section) -->
-                    <div class="payment-verify-container"
-                        style="margin-top: 36px; background: rgba(22, 2, 5, 0.85); border: 1px solid rgba(214, 164, 58, 0.3); border-radius: 24px; padding: 32px 36px; box-shadow: 0 24px 48px rgba(0,0,0,0.5);">
-                        <h3
-                            style="font-family: 'Fraunces', serif; color: var(--gold-light); font-size: 22px; margin-top: 0; margin-bottom: 8px;">
-                            Confirm Your Contribution</h3>
-                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">After scanning
-                            the QR code and completing your payment, enter your details below so we can verify your
-                            contribution.</p>
-
-                        <form id="payment-verify-form"
-                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
-                                <label for="user-name"
-                                    style="font-weight: 600; font-size: 14px; color: var(--gold-light);">Your Full Name
-                                    <span style="color: var(--gold);">*</span></label>
-                                <input type="text" id="user-name" name="userName" required
-                                    placeholder="Enter your full name"
-                                    style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                        <!-- Name and Transaction ID Form (Directly below QR section) -->
+                        <form id="payment-verify-form" style="width: 100%; display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+                            <div class="field-group" style="display: flex; flex-direction: column; gap: 6px;">
+                                <label for="user-name" style="font-weight: 600; font-size: 13px; color: var(--gold-light);">Your Full Name <span style="color: var(--gold);">*</span></label>
+                                <input type="text" id="user-name" name="userName" required placeholder="Enter your full name" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 10px; padding: 11px 14px; color: #ffffff; font-size: 15px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
                             </div>
 
-                            <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
-                                <label for="txn-id"
-                                    style="font-weight: 600; font-size: 14px; color: var(--gold-light);">UPI Transaction
-                                    ID / Ref No. <span style="color: var(--gold);">*</span></label>
-                                <input type="text" id="txn-id" name="txnId" required
-                                    placeholder="12-digit UTR / Ref No. (e.g. 4239xxxxxxxx)"
-                                    style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                            <div class="field-group" style="display: flex; flex-direction: column; gap: 6px;">
+                                <label for="txn-id" style="font-weight: 600; font-size: 13px; color: var(--gold-light);">UPI Transaction ID / Ref No. <span style="color: var(--gold);">*</span></label>
+                                <input type="text" id="txn-id" name="txnId" required placeholder="12-digit UTR / Ref No. (e.g. 4239xxxxxxxx)" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 10px; padding: 11px 14px; color: #ffffff; font-size: 15px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
                             </div>
 
-                            <div style="grid-column: 1 / -1; margin-top: 8px;">
-                                <button type="submit" class="btn btn-primary"
-                                    style="width: 100%; padding: 16px; font-size: 17px; cursor: pointer; border: none;">Submit
-                                    Payment Details</button>
-                            </div>
-                            <div id="verify-success-msg"
-                                style="grid-column: 1 / -1; display: none; background: rgba(63, 107, 53, 0.25); border: 1px solid var(--leaf); color: #8ee879; padding: 14px 20px; border-radius: 12px; font-weight: 600; text-align: center; font-size: 15px; margin-top: 8px;">
-                                Thank you! Your payment details have been submitted. We'll verify and see you on judging
-                                day!
+                            <!-- Required Warning Line -->
+                            <p class="confirm-notice-text" style="margin: 2px 0 4px; font-size: 12px; color: #ffd15c; line-height: 1.4; text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <span>⚠️</span>
+                                <span>Make sure to confirm your contribution, else we cannot verify your contribution.</span>
+                            </p>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; cursor: pointer; border: none; font-weight: 700;">Submit Payment Details</button>
+
+                            <div id="verify-success-msg" style="display: none; background: rgba(63, 107, 53, 0.25); border: 1px solid var(--leaf); color: #8ee879; padding: 12px 16px; border-radius: 10px; font-weight: 600; text-align: center; font-size: 14px;">
+                                Thank you! Your payment details have been submitted. We'll verify and see you on judging day!
                             </div>
                         </form>
                     </div>
@@ -3395,6 +3365,22 @@
         }
 
         updateCartTotal();
+
+        // Copy UPI ID button handler
+        const copyUpiBtn = document.getElementById("copy-upi");
+        if (copyUpiBtn) {
+            copyUpiBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                const upiText = document.getElementById("upi-id")?.textContent?.trim() || "9562375372@pthdfc";
+                navigator.clipboard.writeText(upiText).then(() => {
+                    const orig = copyUpiBtn.textContent;
+                    copyUpiBtn.textContent = "✓ Copied!";
+                    setTimeout(() => { copyUpiBtn.textContent = orig; }, 2000);
+                }).catch(() => {
+                    prompt("Copy UPI ID:", upiText);
+                });
+            });
+        }
 
         // ================= PAYMENT VERIFICATION FORM LOGIC =================
         const paymentForm = document.getElementById("payment-verify-form");
