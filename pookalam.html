@@ -2632,6 +2632,12 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
+        // ================= GOOGLE SHEETS & BACKEND CONFIGURATION =================
+        // 1. Paste your deployed Google Apps Script Web App URL here to log directly to Google Sheets:
+        const GOOGLE_SHEET_URL = window.GOOGLE_SHEET_WEBHOOK_URL || "";
+        // 2. Render backend URL fallback (used if Google Sheets URL is not yet configured):
+        const RENDER_BACKEND_URL = "https://pookalam2026.onrender.com/api/submit";
+
         // ================= HERO POOKALAM SVG GENERATOR (from File 1 reference) =================
         const NS = "http://www.w3.org/2000/svg";
 
@@ -3424,42 +3430,77 @@
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.textContent = "Recording in Excel...";
+                    submitBtn.textContent = "Recording contribution...";
                 }
 
                 try {
-                    let apiUrl = window.GOOGLE_SHEET_WEBHOOK_URL;
-                    if (!apiUrl) {
-                        // If running on Live Server (e.g. port 5500) or local file origin, direct request to Express backend on port 3000
-                        if (window.location.port && window.location.port !== "3000") {
-                            apiUrl = 'https://pookalam2026.onrender.com/api/submit';
-                        } else if (window.location.protocol === 'file:') {
-                            apiUrl = 'https://pookalam2026.onrender.com/api/submit';
-                        } else {
-                            apiUrl = '/api/submit';
+                    let recordSaved = false;
+
+                    // 1. Direct Google Sheets Webhook Logging (Real-time live Google Sheet)
+                    const sheetEndpoint = window.GOOGLE_SHEET_WEBHOOK_URL || GOOGLE_SHEET_URL;
+                    if (sheetEndpoint && sheetEndpoint.startsWith("http")) {
+                        try {
+                            // Using text/plain prevents CORS preflight issues with Google Apps Script
+                            await fetch(sheetEndpoint, {
+                                method: 'POST',
+                                mode: 'no-cors',
+                                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                                body: JSON.stringify(payload)
+                            });
+                            recordSaved = true;
+                        } catch (sheetErr) {
+                            console.warn("Direct Google Sheet post error, trying backend fallback:", sheetErr);
                         }
                     }
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
 
-                    if (response.ok) {
-                        if (verifyMsg) verifyMsg.style.display = "block";
-                        if (submitBtn) {
-                            submitBtn.textContent = "✓ Recorded in Excel!";
-                            submitBtn.style.opacity = "0.85";
+                    // 2. Render / Local Backend Fallback (if Google Sheet URL not set or needs backup)
+                    if (!recordSaved) {
+                        let apiUrl = '/api/submit';
+                        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+                            apiUrl = 'http://localhost:3000/api/submit';
+                        } else if (window.location.hostname.includes('github.io')) {
+                            // Hosted on GitHub Pages: forward to Render backend
+                            apiUrl = RENDER_BACKEND_URL;
                         }
-                    } else {
-                        throw new Error('Server status: ' + response.status);
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (response.ok) {
+                            recordSaved = true;
+                        } else {
+                            const errData = await response.json().catch(() => ({}));
+                            throw new Error(errData.message || ('Server error: ' + response.status));
+                        }
+                    }
+
+                    if (verifyMsg) {
+                        verifyMsg.style.display = "block";
+                        verifyMsg.style.background = "rgba(63, 107, 53, 0.25)";
+                        verifyMsg.style.borderColor = "var(--leaf)";
+                        verifyMsg.style.color = "#8ee879";
+                        verifyMsg.textContent = "✓ Thank you, " + payload.name + "! Your contribution of ₹" + grandTotal + " has been recorded successfully.";
+                    }
+                    if (submitBtn) {
+                        submitBtn.textContent = "✓ Recorded!";
+                        submitBtn.style.opacity = "0.85";
                     }
                 } catch (err) {
-                    console.log('Submission note:', err);
-                    if (verifyMsg) verifyMsg.style.display = "block";
+                    console.error('Submission error:', err);
+                    if (verifyMsg) {
+                        verifyMsg.style.display = "block";
+                        verifyMsg.style.background = "rgba(122, 31, 43, 0.3)";
+                        verifyMsg.style.borderColor = "#e62845";
+                        verifyMsg.style.color = "#ff9ec1";
+                        verifyMsg.textContent = "⚠️ Could not save contribution: " + (err.message || "Please check connection.") + ". If using Google Sheets, verify your Web App URL.";
+                    }
                     if (submitBtn) {
-                        submitBtn.textContent = "✓ Payment Details Submitted!";
-                        submitBtn.style.opacity = "0.85";
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "Try Again";
+                        submitBtn.style.opacity = "1";
                     }
                 }
             });
