@@ -2038,7 +2038,17 @@
                 }
 
                 try {
-                    const apiUrl = window.GOOGLE_SHEET_WEBHOOK_URL || '/api/submit';
+                    let apiUrl = window.GOOGLE_SHEET_WEBHOOK_URL;
+                    if (!apiUrl) {
+                        // If running on Live Server (e.g. port 5500) or local file origin, direct request to Express backend on port 3000
+                        if (window.location.port && window.location.port !== "3000") {
+                            apiUrl = 'http://localhost:3000/api/submit';
+                        } else if (window.location.protocol === 'file:') {
+                            apiUrl = 'http://localhost:3000/api/submit';
+                        } else {
+                            apiUrl = '/api/submit';
+                        }
+                    }
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
