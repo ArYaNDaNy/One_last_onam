@@ -979,6 +979,18 @@
             letter-spacing: -0.02em;
         }
 
+        /* ================= PAYMENT VERIFICATION FORM ================= */
+        .payment-verify-container input:focus {
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 12px rgba(214, 164, 58, 0.3) !important;
+        }
+
+        @media (max-width: 750px) {
+            #payment-verify-form {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         .custom-row {
             display: flex;
             gap: 12px;
@@ -1339,8 +1351,32 @@
                                 <div class="upi-id" id="upi-id">9562375372@pthdfc</div>
                             </div>
                             <button class="copy-btn" id="copy-upi">Copy UPI ID</button>
-                        </div>
                     </div>
+                </div>
+
+                <!-- Payment Verification Form (Below Cart & QR Section) -->
+                <div class="payment-verify-container" style="margin-top: 36px; background: rgba(22, 2, 5, 0.85); border: 1px solid rgba(214, 164, 58, 0.3); border-radius: 24px; padding: 32px 36px; box-shadow: 0 24px 48px rgba(0,0,0,0.5);">
+                    <h3 style="font-family: 'Fraunces', serif; color: var(--gold-light); font-size: 22px; margin-top: 0; margin-bottom: 8px;">Confirm Your Contribution</h3>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">After scanning the QR code and completing your payment, enter your details below so we can verify your contribution.</p>
+                    
+                    <form id="payment-verify-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="user-name" style="font-weight: 600; font-size: 14px; color: var(--gold-light);">Your Full Name <span style="color: var(--gold);">*</span></label>
+                            <input type="text" id="user-name" name="userName" required placeholder="Enter your full name" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                        </div>
+
+                        <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="txn-id" style="font-weight: 600; font-size: 14px; color: var(--gold-light);">UPI Transaction ID / Ref No. <span style="color: var(--gold);">*</span></label>
+                            <input type="text" id="txn-id" name="txnId" required placeholder="12-digit UTR / Ref No. (e.g. 4239xxxxxxxx)" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                        </div>
+
+                        <div style="grid-column: 1 / -1; margin-top: 8px;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 17px; cursor: pointer; border: none;">Submit Payment Details</button>
+                        </div>
+                        <div id="verify-success-msg" style="grid-column: 1 / -1; display: none; background: rgba(63, 107, 53, 0.25); border: 1px solid var(--leaf); color: #8ee879; padding: 14px 20px; border-radius: 12px; font-weight: 600; text-align: center; font-size: 15px; margin-top: 8px;">
+                            Thank you! Your payment details have been submitted. We'll verify and see you on judging day!
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -1843,6 +1879,24 @@
             check.addEventListener('change', updateTotal);
         });
         updateTotal();
+
+        // ================= PAYMENT VERIFICATION FORM LOGIC =================
+        const paymentForm = document.getElementById("payment-verify-form");
+        const verifyMsg = document.getElementById("verify-success-msg");
+        if (paymentForm) {
+            paymentForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                if (verifyMsg) {
+                    verifyMsg.style.display = "block";
+                }
+                const submitBtn = this.querySelector("button[type=submit]");
+                if (submitBtn) {
+                    submitBtn.textContent = "✓ Payment Details Submitted!";
+                    submitBtn.style.opacity = "0.85";
+                    submitBtn.disabled = true;
+                }
+            });
+        }
 
         // ================= UI INTERACTIONS (WITH SAFE NULL CHECKS) =================
         const signupForm = document.getElementById("signup-form");
