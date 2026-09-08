@@ -616,11 +616,23 @@
             margin-bottom: 36px;
         }
 
+        .hero>.wrap {
+            position: relative;
+            z-index: 10;
+        }
+
         .hero-actions {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
             justify-content: center;
+            position: relative;
+            z-index: 20;
+        }
+
+        #see-story-btn {
+            cursor: pointer;
+            pointer-events: auto;
         }
 
         .btn {
@@ -2259,29 +2271,20 @@
                                 <div class="card-media photo-frame">
                                     <img src="./photo1.jpg" alt="Last Onam pookalam" class="fan-photo">
                                 </div>
-                                <span class="card-badge">Day 01</span>
-                                <div class="card-caption">Laying the outer ring</div>
-                                <div class="card-subtext">Day one — seven concentric circles</div>
                             </div>
                             <div class="fan-card" data-index="1">
                                 <div class="card-media photo-frame">
                                     <img src="./photo2.jpg" alt="Pookalam flowers after rain" class="fan-photo">
                                 </div>
-                                <span class="card-badge">The Rain</span>
-                                <div class="card-caption">Sorting marigolds after rain</div>
-                                <div class="card-subtext">Hand-sorting every wet petal</div>
                             </div>
                             <div class="fan-card" data-index="2">
                                 <div class="card-media photo-frame">
                                     <img src="./photo3.jpg" alt="Community arranging flowers" class="fan-photo">
                                 </div>
-                                <span class="card-badge">Terrace Session</span>
-                                <div class="card-caption">Midnight floral mandala</div>
-                                <div class="card-subtext">Neighbors joining till 2 AM</div>
                             </div>
                             <div class="fan-card" data-index="3">
                                 <div class="card-media photo-frame">
-                                    <img src="./photo4.jpg" alt="" class="fan-photo">
+                                    <img src="./photo4.jpg" alt="Pookalam final victory" class="fan-photo">
                                 </div>
                             </div>
 
@@ -2356,7 +2359,7 @@
                     <!-- Layer 2: This Year's Captain (2026) -->
                     <div class="captain-card captain-current">
                         <div class="captain-badge-row">
-                            <span class="captain-tag tag-current">👑 2026 Captain &bull; One Last Onam</span>
+                            <span class="captain-tag tag-current">👑 2026 Captain &bull; Our Last Onam</span>
                         </div>
                         <div class="captain-content">
                             <div class="captain-avatar-ring current-ring">
@@ -2964,7 +2967,9 @@
 
         // Render the decorative hero pookalam into the SVG used by the design.
         const heroKolam = document.getElementById("hero-kolam-svg");
-        if (heroKolam) buildPookalam(heroKolam, { animated: false });
+        if (heroKolam && heroKolam instanceof SVGElement) {
+            buildPookalam(heroKolam, { animated: false });
+        }
 
         // The hero uses the generated pookalam SVG (see #hero-kolam-svg
         // <img> in the markup). The continuous rotation comes purely from the
@@ -3226,7 +3231,13 @@
         if (storyButton && storySection) {
             storyButton.addEventListener('click', (event) => {
                 event.preventDefault();
-                storySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const nav = document.querySelector('nav');
+                const navOffset = nav ? nav.getBoundingClientRect().height + 16 : 70;
+                const targetY = storySection.getBoundingClientRect().top + window.pageYOffset - navOffset;
+                window.scrollTo({
+                    top: Math.max(0, targetY),
+                    behavior: 'smooth'
+                });
             });
         }
 
@@ -3421,9 +3432,9 @@
                     if (!apiUrl) {
                         // If running on Live Server (e.g. port 5500) or local file origin, direct request to Express backend on port 3000
                         if (window.location.port && window.location.port !== "3000") {
-                            apiUrl = 'http://localhost:3000/api/submit';
+                            apiUrl = 'https://pookalam2026.onrender.com/api/submit';
                         } else if (window.location.protocol === 'file:') {
-                            apiUrl = 'http://localhost:3000/api/submit';
+                            apiUrl = 'https://pookalam2026.onrender.com/api/submit';
                         } else {
                             apiUrl = '/api/submit';
                         }
