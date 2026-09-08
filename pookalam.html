@@ -1477,33 +1477,56 @@
         }
 
         .captain-avatar-ring {
-            width: 72px;
-            height: 72px;
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
-            border: 2px solid var(--gold);
+            border: 2.5px solid var(--gold);
             padding: 3px;
             background: rgba(214, 164, 58, 0.15);
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(214, 164, 58, 0.35);
+            position: relative;
         }
 
         .current-ring {
             border-color: var(--pink);
             background: rgba(214, 77, 120, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(214, 77, 120, 0.4);
         }
 
         .captain-avatar-inner {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+        }
+
+        .captain-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .captain-img-2024 {
+            object-position: center 20%;
+        }
+
+        .captain-img-2026 {
+            object-position: center 15%;
+        }
+
+        .captain-card:hover .captain-img {
+            transform: scale(1.09);
         }
 
         .captain-details {
@@ -1566,6 +1589,69 @@
             .captain-current .captain-quote {
                 border-top-color: var(--pink);
             }
+        }
+
+        /* ================= ORNAMENTAL SECTION DIVIDER ================= */
+        .section-divider {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 32px 20px;
+            z-index: 5;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(214, 164, 58, 0.4) 60%, var(--gold));
+            position: relative;
+        }
+
+        .divider-line-right {
+            background: linear-gradient(90deg, var(--gold), rgba(214, 164, 58, 0.4) 40%, transparent);
+        }
+
+        .divider-center {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 18px;
+        }
+
+        .divider-dot {
+            color: var(--gold);
+            font-size: 12px;
+            opacity: 0.8;
+            text-shadow: 0 0 8px rgba(214, 164, 58, 0.6);
+        }
+
+        .divider-badge {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #3d0912 0%, #160205 100%);
+            border: 1.5px solid var(--gold);
+            box-shadow: 0 0 18px rgba(214, 164, 58, 0.4), 0 4px 14px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+        }
+
+        .divider-badge:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 28px rgba(214, 164, 58, 0.8);
+        }
+
+        .divider-diya {
+            width: 26px;
+            height: 32px;
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(255, 158, 27, 0.85));
         }
 
         /* ================= GIVE ================= */
@@ -2120,6 +2206,20 @@
                 </div>
             </div>
         </header>
+
+        <!-- Section Divider -->
+        <div class="section-divider cinematic-hidden" aria-hidden="true">
+            <div class="divider-line divider-line-left"></div>
+            <div class="divider-center">
+                <span class="divider-dot">✦</span>
+                <div class="divider-badge">
+                    <img src="diva.svg" alt="" class="divider-diya">
+                </div>
+                <span class="divider-dot">✦</span>
+            </div>
+            <div class="divider-line divider-line-right"></div>
+        </div>
+
         <section id="story" class="cinematic-hidden">
             <!-- Rangoli corner fragments: kept behind the section content. -->
             <div class="story-rangoli-corner story-rangoli-tl" aria-hidden="true">
@@ -2196,6 +2296,19 @@
             </div>
         </section>
 
+        <!-- Section Divider -->
+        <div class="section-divider cinematic-hidden" aria-hidden="true">
+            <div class="divider-line divider-line-left"></div>
+            <div class="divider-center">
+                <span class="divider-dot">✦</span>
+                <div class="divider-badge">
+                    <img src="diva.svg" alt="" class="divider-diya">
+                </div>
+                <span class="divider-dot">✦</span>
+            </div>
+            <div class="divider-line divider-line-right"></div>
+        </div>
+
         <!-- ================= CAPTAINS SECTION ================= -->
         <section id="captains" class="cinematic-hidden">
             <!-- Rangoli corner fragments: matching theme -->
@@ -2221,7 +2334,7 @@
                         <div class="captain-content">
                             <div class="captain-avatar-ring">
                                 <div class="captain-avatar-inner">
-                                    <span class="captain-icon">🏵️</span>
+                                    <img src="captain_2024.jpg" alt="Jishnu Nair - Pookalam Captain 2024" class="captain-img captain-img-2024">
                                 </div>
                             </div>
                             <div class="captain-details">
@@ -2242,7 +2355,7 @@
                         <div class="captain-content">
                             <div class="captain-avatar-ring current-ring">
                                 <div class="captain-avatar-inner">
-                                    <span class="captain-icon">🪔</span>
+                                    <img src="captain_2026.png" alt="Aryan Dany - Pookalam Captain 2026" class="captain-img captain-img-2026">
                                 </div>
                             </div>
                             <div class="captain-details">
@@ -2257,6 +2370,19 @@
                 </div>
             </div>
         </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider cinematic-hidden" aria-hidden="true">
+            <div class="divider-line divider-line-left"></div>
+            <div class="divider-center">
+                <span class="divider-dot">✦</span>
+                <div class="divider-badge">
+                    <img src="diva.svg" alt="" class="divider-diya">
+                </div>
+                <span class="divider-dot">✦</span>
+            </div>
+            <div class="divider-line divider-line-right"></div>
+        </div>
 
         <section id="give" class="cinematic-hidden">
             <!-- Rangoli corner fragments: matching OUR STORY background design -->
@@ -2458,6 +2584,20 @@
                     </div>
                 </div>
         </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider cinematic-hidden" aria-hidden="true">
+            <div class="divider-line divider-line-left"></div>
+            <div class="divider-center">
+                <span class="divider-dot">✦</span>
+                <div class="divider-badge">
+                    <img src="diva.svg" alt="" class="divider-diya">
+                </div>
+                <span class="divider-dot">✦</span>
+            </div>
+            <div class="divider-line divider-line-right"></div>
+        </div>
+
         <div class="photo-lightbox" id="photo-lightbox" role="dialog" aria-modal="true"
             aria-label="Expanded pookalam photo">
             <div class="lightbox-polaroid">
