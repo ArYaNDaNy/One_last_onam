@@ -86,7 +86,15 @@ app.get('/api/download', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Pookalam Backend Server running at http://localhost:${PORT}`);
     console.log(`Excel sheet path: ${EXCEL_FILE}`);
+});
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Please close the process using port ${PORT} or run on another port e.g. PORT=3001 npm start`);
+    } else {
+        console.error('Server error:', err);
+    }
 });
