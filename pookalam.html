@@ -2012,16 +2012,55 @@
         const paymentForm = document.getElementById("payment-verify-form");
         const verifyMsg = document.getElementById("verify-success-msg");
         if (paymentForm) {
-            paymentForm.addEventListener("submit", function (e) {
+            paymentForm.addEventListener("submit", async function (e) {
                 e.preventDefault();
-                if (verifyMsg) {
-                    verifyMsg.style.display = "block";
-                }
+
                 const submitBtn = this.querySelector("button[type=submit]");
+                const nameInput = document.getElementById("user-name");
+                const txnInput = document.getElementById("txn-id");
+
+                const pookalamAmtRaw = parseInt(document.getElementById("pookalam-amt-input")?.value || "30", 10);
+                const pookalamAmt = (isNaN(pookalamAmtRaw) || pookalamAmtRaw < 30) ? 30 : pookalamAmtRaw;
+                const grandTotal = pookalamAmt + (mullapooQty * 30) + (payasamQty * 40);
+
+                const payload = {
+                    name: nameInput ? nameInput.value.trim() : "",
+                    transactionId: txnInput ? txnInput.value.trim() : "",
+                    payasamCount: payasamQty,
+                    mullapooCount: mullapooQty,
+                    pookalamAmount: pookalamAmt,
+                    totalAmount: grandTotal
+                };
+
                 if (submitBtn) {
-                    submitBtn.textContent = "✓ Payment Details Submitted!";
-                    submitBtn.style.opacity = "0.85";
                     submitBtn.disabled = true;
+                    submitBtn.textContent = "Recording in Excel...";
+                }
+
+                try {
+                    const apiUrl = window.GOOGLE_SHEET_WEBHOOK_URL || '/api/submit';
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        if (verifyMsg) verifyMsg.style.display = "block";
+                        if (submitBtn) {
+                            submitBtn.textContent = "✓ Recorded in Excel!";
+                            submitBtn.style.opacity = "0.85";
+                        }
+                    } else {
+                        throw new Error('Server status: ' + response.status);
+                    }
+                } catch (err) {
+                    console.log('Submission note:', err);
+                    if (verifyMsg) verifyMsg.style.display = "block";
+                    if (submitBtn) {
+                        submitBtn.textContent = "✓ Payment Details Submitted!";
+                        submitBtn.style.opacity = "0.85";
+                    }
                 }
             });
         }
