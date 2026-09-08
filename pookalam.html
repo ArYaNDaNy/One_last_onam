@@ -2634,7 +2634,7 @@
     <script>
         // ================= GOOGLE SHEETS & BACKEND CONFIGURATION =================
         // 1. Paste your deployed Google Apps Script Web App URL here to log directly to Google Sheets:
-        const GOOGLE_SHEET_URL = window.GOOGLE_SHEET_WEBHOOK_URL || "";
+        const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwLIFL9w2uWW63srwwYxayqtWtMx88CESOuJjaGgWi7tUL-nEpHI3LcozL3CBpAZwzI/exec";
         // 2. Render backend URL fallback (used if Google Sheets URL is not yet configured):
         const RENDER_BACKEND_URL = "https://pookalam2026.onrender.com/api/submit";
 
@@ -3436,11 +3436,10 @@
                 try {
                     let recordSaved = false;
 
-                    // 1. Direct Google Sheets Webhook Logging (Real-time live Google Sheet)
+                    // 1. Direct Google Sheets Webhook Logging (Live Google Sheet)
                     const sheetEndpoint = window.GOOGLE_SHEET_WEBHOOK_URL || GOOGLE_SHEET_URL;
                     if (sheetEndpoint && sheetEndpoint.startsWith("http")) {
                         try {
-                            // Using text/plain prevents CORS preflight issues with Google Apps Script
                             await fetch(sheetEndpoint, {
                                 method: 'POST',
                                 mode: 'no-cors',
@@ -3449,12 +3448,12 @@
                             });
                             recordSaved = true;
                         } catch (sheetErr) {
-                            console.warn("Direct Google Sheet post error, trying backend fallback:", sheetErr);
+                            console.warn("Direct Google Sheet post error:", sheetErr);
                         }
                     }
 
-                    // 2. Render / Local Backend Fallback (if Google Sheet URL not set or needs backup)
-                    if (!recordSaved) {
+                    // 2. Also send to Backend API (Render / Localhost) as backup
+                    try {
                         let apiUrl = '/api/submit';
                         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
                             apiUrl = 'http://localhost:3000/api/submit';
@@ -3471,22 +3470,25 @@
 
                         if (response.ok) {
                             recordSaved = true;
-                        } else {
-                            const errData = await response.json().catch(() => ({}));
-                            throw new Error(errData.message || ('Server error: ' + response.status));
                         }
+                    } catch (backendErr) {
+                        console.warn("Backend backup post note:", backendErr);
                     }
 
-                    if (verifyMsg) {
-                        verifyMsg.style.display = "block";
-                        verifyMsg.style.background = "rgba(63, 107, 53, 0.25)";
-                        verifyMsg.style.borderColor = "var(--leaf)";
-                        verifyMsg.style.color = "#8ee879";
-                        verifyMsg.textContent = "✓ Thank you, " + payload.name + "! Your contribution of ₹" + grandTotal + " has been recorded successfully.";
-                    }
-                    if (submitBtn) {
-                        submitBtn.textContent = "✓ Recorded!";
-                        submitBtn.style.opacity = "0.85";
+                    if (recordSaved) {
+                        if (verifyMsg) {
+                            verifyMsg.style.display = "block";
+                            verifyMsg.style.background = "rgba(63, 107, 53, 0.25)";
+                            verifyMsg.style.borderColor = "var(--leaf)";
+                            verifyMsg.style.color = "#8ee879";
+                            verifyMsg.textContent = "✓ Thank you, " + payload.name + "! Your contribution of ₹" + grandTotal + " has been recorded successfully.";
+                        }
+                        if (submitBtn) {
+                            submitBtn.textContent = "✓ Recorded!";
+                            submitBtn.style.opacity = "0.85";
+                        }
+                    } else {
+                        throw new Error("Could not reach Google Sheets or backend.");
                     }
                 } catch (err) {
                     console.error('Submission error:', err);
