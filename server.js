@@ -12,6 +12,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
+const COLUMNS = [
+    { header: 'Timestamp', key: 'timestamp', width: 22 },
+    { header: 'name', key: 'name', width: 25 },
+    { header: 'tranasaction id', key: 'transaction_id', width: 25 },
+    { header: 'payasam count', key: 'payasam_count', width: 15 },
+    { header: 'mullapoo count', key: 'mullapoo_count', width: 15 },
+    { header: 'contribution for pookalam amnt', key: 'pookalam_amount', width: 30 },
+    { header: 'total amt', key: 'total_amount', width: 15 }
+];
+
 // Function to get or create workbook and sheet
 async function getOrCreateSheet() {
     const workbook = new ExcelJS.Workbook();
@@ -20,17 +30,10 @@ async function getOrCreateSheet() {
     if (fs.existsSync(EXCEL_FILE)) {
         await workbook.xlsx.readFile(EXCEL_FILE);
         worksheet = workbook.getWorksheet('Contributions') || workbook.worksheets[0];
+        worksheet.columns = COLUMNS;
     } else {
         worksheet = workbook.addWorksheet('Contributions');
-        worksheet.columns = [
-            { header: 'Timestamp', key: 'timestamp', width: 22 },
-            { header: 'name', key: 'name', width: 25 },
-            { header: 'tranasaction id', key: 'transaction_id', width: 25 },
-            { header: 'payasam count', key: 'payasam_count', width: 15 },
-            { header: 'mullapoo count', key: 'mullapoo_count', width: 15 },
-            { header: 'contribution for pookalam amnt', key: 'pookalam_amount', width: 30 },
-            { header: 'total amt', key: 'total_amount', width: 15 }
-        ];
+        worksheet.columns = COLUMNS;
 
         // Format header row style
         worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
@@ -57,15 +60,16 @@ app.post('/api/submit', async (req, res) => {
 
         const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-        worksheet.addRow({
-            timestamp: timestamp,
-            name: String(name).trim(),
-            transaction_id: String(transactionId).trim(),
-            payasam_count: Number(payasamCount || 0),
-            mullapoo_count: Number(mullapooCount || 0),
-            pookalam_amount: Number(pookalamAmount || 30),
-            total_amount: Number(totalAmount || 0)
-        });
+        // Use array format to guarantee column index placement regardless of file reload state
+        worksheet.addRow([
+            timestamp,
+            String(name).trim(),
+            String(transactionId).trim(),
+            Number(payasamCount || 0),
+            Number(mullapooCount || 0),
+            Number(pookalamAmount || 30),
+            Number(totalAmount || 0)
+        ]);
 
         await workbook.xlsx.writeFile(EXCEL_FILE);
 

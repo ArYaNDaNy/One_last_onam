@@ -41,7 +41,19 @@
 
         body {
             margin: 0;
-            background: var(--dark-maroon);
+            /* One continuous maroon atmosphere instead of unrelated section colours. */
+            background:
+                radial-gradient(circle at 50% 8%, rgba(122, 31, 43, 0.22), transparent 34%),
+                linear-gradient(180deg,
+                    #160205 0%,
+                    #20040a 14%,
+                    #2b060d 31%,
+                    #350912 48%,
+                    #3b0b14 61%,
+                    #2e0710 76%,
+                    #20040a 89%,
+                    #160205 100%);
+            background-attachment: fixed;
             color: var(--text-primary);
             font-family: 'Karla', sans-serif;
             font-size: 17px;
@@ -104,7 +116,137 @@
             padding: 0 32px;
         }
 
+        /* ================= ILLUMINATED VILAKKU SIDE LAMPS ================= */
+        /* One continuous rail per side. All four lamps live inside the SAME div,
+           so their glow/shadows never get clipped at separate div boundaries. */
+        .vilakku-side {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: clamp(54px, 4.8vw, 74px);
+            height: 100%;
+            z-index: 42;
+            pointer-events: none;
+            overflow: visible;
+            opacity: 0.96;
+        }
+
+        .vilakku-left {
+            left: 22px;
+        }
+
+        .vilakku-right {
+            right: 22px;
+        }
+
+        /* The chain enters from the actual top edge of the screen. */
+        .vilakku-side::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg,
+                    rgba(247, 223, 153, 0.78),
+                    rgba(214, 164, 58, 0.16) 18%,
+                    transparent 90%);
+            opacity: 0.22;
+            z-index: 1;
+        }
+
+        .vilakku-stack {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* ALL SEVEN IMAGES ARE CHILDREN OF THIS ONE STACK DIV. */
+        .vilakku-stack img {
+            position: absolute;
+            left: 50%;
+            width: auto;
+            height: 13vh;
+            max-width: none;
+            object-fit: contain;
+            display: block;
+            transform: translateX(-50%);
+            /* Static soft glow only — no animation, so scrolling stays smooth. */
+            filter: drop-shadow(0 0 4px rgba(247, 190, 70, 0.20)) drop-shadow(0 0 8px rgba(214, 164, 58, 0.10));
+        }
+
+        /* Seven smaller lamps are stacked in one continuous rail.
+           Each next lamp starts almost exactly where the previous lamp ends,
+           so the built-in hanging chain visually meets the lamp above it.
+           Extra breathing room is intentionally left below the final lamp. */
+        .vilakku-stack img:nth-child(1) {
+            top: 0;
+        }
+
+        .vilakku-stack img:nth-child(2) {
+            top: 12.7vh;
+        }
+
+        .vilakku-stack img:nth-child(3) {
+            top: 25.4vh;
+        }
+
+        .vilakku-stack img:nth-child(4) {
+            top: 38.1vh;
+        }
+
+        .vilakku-stack img:nth-child(5) {
+            top: 50.8vh;
+        }
+
+        .vilakku-stack img:nth-child(6) {
+            top: 63.5vh;
+        }
+
+        .vilakku-stack img:nth-child(7) {
+            top: 76.2vh;
+        }
+
+        /* Lamps stay still so the decoration does not add animation jank. */
+
+        .vilakku-right .vilakku-stack img {
+            transform: translateX(-50%) scaleX(-1);
+        }
+
+        @media (max-width: 1100px) {
+            .vilakku-side {
+                width: 54px;
+            }
+
+            .vilakku-left {
+                left: 14px;
+            }
+
+            .vilakku-right {
+                right: 14px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .vilakku-side {
+                width: 40px;
+                opacity: 0.42;
+            }
+
+            .vilakku-left {
+                left: 8px;
+            }
+
+            .vilakku-right {
+                right: 8px;
+            }
+        }
+
         /* ================= HERO POOKALAM BACKGROUND ================= */
+
         /* Geometry sourced from File 1's .hero-kolam-bg reference (buildPookalam SVG). */
         /* Wrapper handles positioning/entrance-reveal; inner svg handles the continuous */
         /* rotation, so the two transforms never fight each other. */
@@ -127,7 +269,7 @@
             width: min(60vw, 700px);
             height: min(60vw, 700px);
             object-fit: contain;
-            opacity: 0.15;
+            opacity: 0.12;
             filter: drop-shadow(0 20px 40px rgba(122, 31, 43, 0.15));
             animation: slowSpin 240s linear infinite;
             pointer-events: none;
@@ -299,13 +441,22 @@
 
         .cinematic-ready {
             opacity: 1 !important;
-            pointer-events: auto !important;
+            pointer-events: auto;
             transform: translateY(0) !important;
         }
 
         nav.cinematic-ready {
             transform: translateX(-50%) !important;
-            pointer-events: auto !important;
+        }
+
+        .vilakku-side.cinematic-hidden {
+            transform: translateY(-12px);
+        }
+
+        .vilakku-side.cinematic-ready {
+            opacity: 0.96 !important;
+            transform: translateY(0) !important;
+            pointer-events: none;
         }
 
         .delay-reveal {
@@ -315,10 +466,10 @@
         /* ================= NAV ================= */
         nav {
             position: fixed;
-            top: 24px;
+            top: 18px;
             left: 50%;
             transform: translateX(-50%);
-            width: min(calc(100% - 40px), 1100px);
+            width: min(calc(100% - 48px), 1240px);
             z-index: 50;
             background: rgba(22, 2, 5, 0.75);
             backdrop-filter: blur(24px) saturate(150%);
@@ -401,7 +552,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--dark-maroon);
+            background:
+                radial-gradient(circle at 50% 42%, rgba(122, 31, 43, 0.28), transparent 45%),
+                linear-gradient(180deg, #160205 0%, #22040a 58%, #2b060d 100%);
         }
 
         .hero::before {
@@ -510,11 +663,432 @@
             border-color: var(--gold);
         }
 
+
+        /* ================= REAL PHOTO GALLERY MEDIA ================= */
+        .fan-card .card-media.photo-frame {
+            background: transparent;
+            border: 3px solid var(--gold);
+            border-radius: 18px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .fan-card .fan-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
+
+        /* ================= CONTRIBUTION QR ================= */
+        .qr-contribute {
+            width: 100%;
+            text-align: center;
+            margin: 6px 0 4px;
+        }
+
+        .qr-contribute h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            color: var(--gold-light);
+            margin: 0 0 4px;
+        }
+
+        .qr-contribute p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 12px;
+        }
+
+        .qr-wrapper {
+            display: inline-block;
+            background: #fff;
+            padding: 14px;
+            border-radius: 20px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .qr-wrapper img {
+            width: 220px;
+            height: 220px;
+            display: block;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        /* Prevent the hero heading from visually clipping on tall/wide glyphs. */
+        .hero-text-backing {
+            overflow: visible;
+        }
+
+        .hero h1.massive-greeting {
+            max-width: 780px;
+            padding: 0 10px 8px;
+            line-height: 1.16;
+            overflow: visible;
+        }
+
+        .hero p.lede {
+            max-width: 660px;
+        }
+
+        @media (max-width: 500px) {
+            .hero h1.massive-greeting {
+                max-width: 100%;
+                padding-left: 4px;
+                padding-right: 4px;
+                line-height: 1.14;
+            }
+
+            .qr-wrapper img {
+                width: min(220px, 68vw);
+                height: min(220px, 68vw);
+            }
+        }
+
+        /* ================= INTRO CONTROLS ================= */
+        #cinematic-intro {
+            isolation: isolate;
+        }
+
+        #intro-video {
+            background: var(--maroon-deep);
+        }
+
+        #skip-intro {
+            position: absolute;
+            right: clamp(18px, 3vw, 42px);
+            bottom: clamp(18px, 3vw, 36px);
+            z-index: 5;
+            padding: 12px 20px;
+            border-radius: 999px;
+            color: var(--cream);
+            background: rgba(22, 2, 5, 0.72);
+            border: 1px solid rgba(214, 164, 58, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            transition: transform .2s ease, background .2s ease, border-color .2s ease;
+        }
+
+        #skip-intro:hover {
+            transform: translateY(-2px);
+            background: rgba(214, 164, 58, 0.18);
+            border-color: var(--gold);
+        }
+
+
+        /* ================= SMOOTH COLOUR TRANSITIONS ================= */
+        body {
+            background:
+                radial-gradient(ellipse 80% 38% at 50% 8%, rgba(122, 31, 43, 0.28), transparent 70%),
+                linear-gradient(180deg, #160205 0%, #1d0308 20%, #27050c 40%, #300710 58%, #2b060d 76%, #21040a 90%, #160205 100%);
+            background-attachment: fixed;
+        }
+
+        .hero {
+            background:
+                radial-gradient(ellipse 75% 65% at 50% 45%, rgba(122, 31, 43, 0.24), transparent 72%),
+                linear-gradient(180deg, #160205 0%, #21040a 55%, #29060d 100%);
+        }
+
+        #story {
+            background: linear-gradient(180deg, #29060d 0%, #2e0710 50%, #300710 100%);
+        }
+
+        #give {
+            background: linear-gradient(180deg, #300710 0%, #29060d 52%, #21040a 100%);
+        }
+
+        footer {
+            background: linear-gradient(180deg, #21040a 0%, #160205 100%);
+        }
+
+        /* ================= CONTRIBUTION INVITATION ================= */
+        .contribution-section {
+            overflow: hidden;
+        }
+
+        .contribution-head {
+            max-width: 780px;
+        }
+
+        .contribution-grid {
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            gap: 72px;
+            align-items: center;
+        }
+
+        .contribution-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .reason-card {
+            display: grid;
+            grid-template-columns: 54px 1fr;
+            gap: 18px;
+            align-items: start;
+            padding: 22px 24px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(214, 164, 58, 0.13);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .reason-number {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            border: 1px solid rgba(214, 164, 58, 0.45);
+            color: var(--gold-light);
+            font-family: 'Fraunces', serif;
+            font-size: 14px;
+            font-weight: 700;
+            background: rgba(214, 164, 58, 0.08);
+        }
+
+        .reason-card h3 {
+            color: var(--gold-light);
+            font-size: 20px;
+            margin: 0 0 5px;
+        }
+
+        .reason-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        .contribution-quote {
+            margin: 16px 0 0;
+        }
+
+        .contribute-card {
+            padding: 1px;
+            border-radius: 28px;
+            background: linear-gradient(145deg, rgba(214, 164, 58, 0.60), rgba(214, 164, 58, 0.08) 45%, rgba(247, 145, 22, 0.34));
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+        }
+
+        .contribute-card-inner {
+            min-height: 430px;
+            padding: 46px 42px;
+            border-radius: 27px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background:
+                radial-gradient(circle at 80% 10%, rgba(214, 164, 58, 0.12), transparent 35%),
+                rgba(22, 2, 5, 0.92);
+        }
+
+        .contribute-kicker {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            margin-bottom: 14px;
+        }
+
+        .contribute-card h3 {
+            color: var(--gold-light);
+            font-size: clamp(30px, 4vw, 42px);
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .contribute-card p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+
+        .contribute-form-btn {
+            width: 100%;
+            min-height: 58px;
+            font-size: 17px;
+        }
+
+        .contribute-form-btn span {
+            margin-left: 10px;
+            font-size: 20px;
+        }
+
+        .form-note {
+            margin: 14px 0 0 !important;
+            font-size: 12px !important;
+            color: rgba(252, 248, 242, 0.48) !important;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .contribution-grid {
+                grid-template-columns: 1fr;
+                gap: 44px;
+            }
+
+            .contribute-card-inner {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .reason-card {
+                grid-template-columns: 44px 1fr;
+                padding: 18px;
+                gap: 14px;
+            }
+
+            .reason-number {
+                width: 40px;
+                height: 40px;
+            }
+
+            .contribute-card-inner {
+                padding: 34px 24px;
+            }
+        }
+
+
+        /* ================= PHOTO POLAROID LIGHTBOX ================= */
+        .photo-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(10, 1, 3, 0.88);
+            backdrop-filter: blur(18px) saturate(120%);
+            -webkit-backdrop-filter: blur(18px) saturate(120%);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .35s ease, visibility .35s ease;
+        }
+
+        .photo-lightbox.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .lightbox-polaroid {
+            position: relative;
+            width: min(88vw, 760px);
+            max-height: 90vh;
+            padding: 18px 18px 58px;
+            background: #fffdf8;
+            border-radius: 4px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, .65);
+            transform: perspective(1200px) scale(.72) rotateY(-90deg) rotateZ(-2deg);
+            opacity: 0;
+            transition: transform .55s cubic-bezier(.16, 1, .3, 1), opacity .35s ease;
+        }
+
+        .photo-lightbox.open .lightbox-polaroid {
+            transform: perspective(1200px) scale(1) rotateY(0deg) rotateZ(0deg);
+            opacity: 1;
+        }
+
+        .lightbox-polaroid img {
+            width: 100%;
+            height: min(72vh, 650px);
+            object-fit: contain;
+            display: block;
+            background: #eee8dc;
+            border: 1px solid rgba(0, 0, 0, .08);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 13px;
+            color: #392b22;
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(22, 2, 5, .92);
+            color: var(--gold-light);
+            border: 1px solid rgba(214, 164, 58, .65);
+            font-size: 26px;
+            line-height: 1;
+            z-index: 3;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+            cursor: pointer;
+        }
+
+        .lightbox-close:hover {
+            background: var(--gold);
+            color: var(--maroon-deep);
+            transform: scale(1.05);
+        }
+
+        .fan-card .photo-frame {
+            cursor: zoom-in;
+        }
+
+        @media (max-width: 600px) {
+            .photo-lightbox {
+                padding: 18px;
+            }
+
+            .lightbox-polaroid {
+                width: 92vw;
+                padding: 12px 12px 48px;
+            }
+
+            .lightbox-polaroid img {
+                height: 70vh;
+            }
+
+            .lightbox-caption {
+                font-size: 15px;
+                bottom: 10px;
+            }
+
+            .lightbox-close {
+                top: -12px;
+                right: -8px;
+                width: 40px;
+                height: 40px;
+                font-size: 22px;
+            }
+        }
+
         /* ================= SECTIONS ================= */
         section {
             padding: 120px 0;
             position: relative;
-            scroll-margin-top: 90px;
         }
 
         .section-head {
@@ -540,10 +1114,83 @@
             font-size: 18px;
         }
 
+
+        /* ================= STORY & GIVE CORNER RANGOLI ================= */
+        /* Decorative quadrants live behind the section content so they never steal focus. */
+        #story,
+        #give {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-rangoli-corner {
+            position: absolute;
+            width: min(50vw, 620px);
+            height: min(50vw, 620px);
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.16;
+            filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.28));
+        }
+
+        .story-rangoli-corner img {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            max-width: none;
+            object-fit: cover;
+            display: block;
+        }
+
+        .story-rangoli-tl {
+            top: 0;
+            left: 0;
+        }
+
+        .story-rangoli-tl img {
+            /* Original requested corner: Q4 / bottom-right quadrant of the SVG. */
+            left: -100%;
+            top: -100%;
+        }
+
+        .story-rangoli-br {
+            right: 0;
+            bottom: -10%;
+        }
+
+        .story-rangoli-br img {
+            /* Q2: top-left quadrant — kept as the bottom-right design the user preferred. */
+            left: 0;
+            top: 0;
+        }
+
+        #story>.wrap,
+        #give>.wrap {
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 850px) {
+            .story-rangoli-corner {
+                width: min(56vw, 420px);
+                height: min(56vw, 420px);
+                opacity: 0.10;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .story-rangoli-corner {
+                width: 48vw;
+                height: 48vw;
+            }
+        }
+
         /* ================= STORY ================= */
         #story {
-            background: linear-gradient(180deg, var(--dark-maroon) 0%, var(--maroon-accent) 100%);
-            border-top: 1px solid rgba(214, 164, 58, 0.1);
+            background:
+                linear-gradient(180deg, #2b060d 0%, #330812 48%, #3b0b14 100%);
+            border-top: 1px solid rgba(214, 164, 58, 0.10);
         }
 
         .story-grid {
@@ -584,27 +1231,6 @@
         }
 
         /* ================= FAN GALLERY ================= */
-
-        .fan-card .card-media.photo-frame {
-            background: transparent;
-            border: 3px solid #D6A43A;
-            border-radius: 18px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .fan-card .fan-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            display: block;
-        }
-
-
         .fan-gallery-container {
             display: flex;
             flex-direction: column;
@@ -756,12 +1382,15 @@
             text-align: center;
         }
 
+
         /* ================= GIVE ================= */
         #give {
-            background: linear-gradient(160deg, var(--dark-maroon) 0%, #170308 100%);
+            background:
+                linear-gradient(180deg, #2b060d 0%, #330812 48%, #3b0b14 100%);
             color: var(--cream);
             position: relative;
-            border-top: 1px solid rgba(214, 164, 58, 0.1);
+            overflow: hidden;
+            border-top: 1px solid rgba(214, 164, 58, 0.10);
         }
 
         .give-grid {
@@ -826,169 +1455,35 @@
             border: 1px solid rgba(214, 164, 58, 0.2);
         }
 
-        /* ================= CONTRIBUTIONS & CHECKBOXES ================= */
-        .give-options-card {
-            background: rgba(22, 2, 5, 0.8);
-            border-radius: 24px;
-            padding: 32px;
-            border: 1px solid rgba(214, 164, 58, 0.2);
-            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+        .amounts {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .option-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
             margin-bottom: 24px;
         }
 
-        .option-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 18px 20px;
+        .amt {
+            flex: 1;
+            min-width: 80px;
+            padding: 14px 16px;
+            border: 1px solid rgba(214, 164, 58, 0.3);
+            border-radius: 12px;
             background: rgba(0, 0, 0, 0.3);
-            border: 1.5px solid rgba(214, 164, 58, 0.25);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            position: relative;
-            user-select: none;
-        }
-
-        .option-item:hover {
-            border-color: var(--gold);
-            background: rgba(214, 164, 58, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .option-item.checked {
-            border-color: var(--gold);
-            background: rgba(214, 164, 58, 0.15);
-            box-shadow: 0 4px 16px rgba(214, 164, 58, 0.15);
-        }
-
-        .option-item.disabled {
-            cursor: default;
-            opacity: 0.9;
-        }
-
-        .option-checkbox {
-            position: relative;
-            width: 24px;
-            height: 24px;
-            min-width: 24px;
-            margin-top: 2px;
-        }
-
-        .option-checkbox input[type="checkbox"] {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            position: absolute;
-        }
-
-        .checkmark {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            border: 2px solid var(--gold);
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: transparent;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--cream);
             transition: all 0.2s ease;
         }
 
-        .option-item.checked .checkmark {
+        .amt:hover {
+            border-color: var(--gold);
+            background: rgba(214, 164, 58, 0.1);
+        }
+
+        .amt.selected {
             background: var(--gold);
             color: var(--maroon-deep);
-        }
-
-        .option-info {
-            flex: 1;
-        }
-
-        .option-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .option-header h4 {
-            margin: 0;
-            font-size: 17px;
-            color: var(--gold-light);
-            font-family: 'Fraunces', serif;
-            font-weight: 600;
-        }
-
-        .badge-req {
-            font-size: 11px;
-            font-family: 'Karla', sans-serif;
-            background: rgba(214, 164, 58, 0.2);
-            color: var(--gold);
-            padding: 2px 8px;
-            border-radius: 999px;
-            margin-left: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .option-price {
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--gold);
-        }
-
-        .option-info p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        .total-bar {
-            background: rgba(214, 164, 58, 0.12);
-            border: 1.5px solid var(--gold);
-            padding: 16px 24px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .total-label {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--cream);
-            font-family: 'Fraunces', serif;
-        }
-
-        .total-amount {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--gold-light);
-            letter-spacing: -0.02em;
-        }
-
-        /* ================= PAYMENT VERIFICATION FORM ================= */
-        .payment-verify-container input:focus {
-            border-color: var(--gold) !important;
-            box-shadow: 0 0 12px rgba(214, 164, 58, 0.3) !important;
-        }
-
-        @media (max-width: 750px) {
-            #payment-verify-form {
-                grid-template-columns: 1fr !important;
-            }
+            border-color: transparent;
         }
 
         .custom-row {
@@ -1066,8 +1561,8 @@
             text-align: center;
             color: var(--cream-muted);
             font-size: 15px;
-            background: var(--maroon-deep);
-            border-top: 1px solid rgba(214, 164, 58, 0.1);
+            background: linear-gradient(180deg, #20040a 0%, #160205 100%);
+            border-top: 1px solid rgba(214, 164, 58, 0.08);
         }
 
         footer a {
@@ -1124,38 +1619,265 @@
                 padding: 24px;
             }
         }
+
+        /* ================= CART, CHECKBOX & PAYMENT VERIFICATION STYLES ================= */
+        .give-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 36px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .give-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .give-options-card {
+            background: rgba(22, 2, 5, 0.85);
+            border: 1px solid rgba(214, 164, 58, 0.25);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1.5px solid rgba(214, 164, 58, 0.2);
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .option-item:hover {
+            border-color: rgba(214, 164, 58, 0.5);
+            background: rgba(214, 164, 58, 0.05);
+        }
+
+        .option-item.checked {
+            border-color: var(--gold);
+            background: rgba(214, 164, 58, 0.1);
+        }
+
+        .option-checkbox {
+            position: relative;
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .option-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.5px solid var(--gold);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .option-item.checked .checkmark {
+            background: var(--gold);
+            color: var(--maroon-deep);
+        }
+
+        .option-info {
+            flex: 1;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .option-header h4 {
+            margin: 0;
+            font-size: 17px;
+            color: var(--gold-light);
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge-req {
+            font-size: 11px;
+            font-family: 'Karla', sans-serif;
+            background: rgba(214, 164, 58, 0.2);
+            color: var(--gold);
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .option-price {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--gold);
+        }
+
+        .option-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .total-bar {
+            background: rgba(214, 164, 58, 0.12);
+            border: 1.5px solid var(--gold);
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--cream);
+            font-family: 'Fraunces', serif;
+        }
+
+        .total-amount {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--gold-light);
+            letter-spacing: -0.02em;
+        }
+
+        .give-card {
+            background: rgba(22, 2, 5, 0.85);
+            border: 1px solid rgba(214, 164, 58, 0.25);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .upi-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            border: 1px solid rgba(214, 164, 58, 0.15);
+        }
+
+        .upi-id {
+            font-family: 'Karla', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 0.02em;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold-light);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(214, 164, 58, 0.2);
+            color: #ffffff;
+        }
+
+        /* Payment Verification Form */
+        .payment-verify-container {
+            grid-column: 1 / -1;
+            margin-top: 36px;
+            background: rgba(22, 2, 5, 0.85);
+            border: 1px solid rgba(214, 164, 58, 0.3);
+            border-radius: 24px;
+            padding: 32px 36px;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+        }
+
+        .payment-verify-container input:focus {
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 12px rgba(214, 164, 58, 0.3) !important;
+        }
+
+        @media (max-width: 750px) {
+            #payment-verify-form {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- ================= LOADER (Cinematic Crossfade Only) ================= -->
     <div id="loader">
-        <div class="loader-pookalam-stage" aria-hidden="true">
-            <img src="Gemini_Generated_Image_zie88qzie88qzie8.png" class="loader-bg loader-base" alt="">
+        <div aria-hidden="true" class="loader-pookalam-stage">
+            <img alt="" class="loader-bg loader-base" src="Gemini_Generated_Image_zie88qzie88qzie8-clean.png" />
             <div class="loader-fill-reveal">
-                <img src="Gemini_Generated_Image_oyjlbuoyjlbuoyjl-clean.png" class="loader-bg loader-complete" alt="">
+                <img alt="" class="loader-bg loader-complete" src="Gemini_Generated_Image_oyjlbuoyjlbuoyjl-clean.png" />
             </div>
         </div>
-
         <div class="loader-content">
             <div class="loader-mal">ഓണാശംസകൾ</div>
             <div class="loader-caption">Preparing the Pookalam</div>
         </div>
     </div>
-
-    <!-- ================= CINEMATIC INTRO STAGE ================= -->
     <div id="cinematic-intro">
-
-        <video id="intro-video" muted playsinline preload="auto">
-            <source src="Create_a_premium_cinematic_Ona_gwr_video_mvp.mp4" type="video/mp4">
+        <!-- Background Video preloads immediately, NO LOOP -->
+        <video autoplay="" id="intro-video" muted="" playsinline="" preload="auto">
+            <source src="Create_a_premium_cinematic_Ona_gwr_video_mvp.mp4" type="video/mp4" />
         </video>
+        <button aria-label="Skip cinematic intro" id="skip-intro" type="button">Skip intro →</button>
     </div>
-
-    <!-- ================= MAIN PAGE ================= -->
-    <!-- Content wrapped and hidden during cinematic intro -->
     <div id="website-content">
-
         <nav class="cinematic-hidden delay-reveal">
             <div class="wrap">
                 <div class="brand"><svg class="mini-flower" viewBox="0 0 100 100"></svg>Pookalam <span>2026</span></div>
@@ -1165,8 +1887,33 @@
                 </div>
             </div>
         </nav>
-
         <header class="hero">
+            <!-- Vilakku decoration belongs to the hero only, so it scrolls away with the first section. -->
+            <!-- One continuous div on each side: all seven lamps share the same rail/container. -->
+            <div class="vilakku-side vilakku-left cinematic-hidden" aria-hidden="true">
+                <div class="vilakku-stack">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                </div>
+            </div>
+
+            <div class="vilakku-side vilakku-right cinematic-hidden" aria-hidden="true">
+                <div class="vilakku-stack">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                    <img src="pngkey.com-genie-bottle-png-4021792.png" alt="">
+                </div>
+            </div>
+
             <!-- Rotating pookalam background, geometry from File 1's hero-kolam-bg reference -->
             <div class="hero-kolam-wrap cinematic-hidden delay-reveal" aria-hidden="true">
                 <img class="hero-kolam-bg" id="hero-kolam-svg"
@@ -1182,17 +1929,24 @@
                         small, tired, stubborn crew. This year we want the whole neighbourhood on the ground with us.
                     </p>
                     <div class="hero-actions">
-                        <a href="#story" id="see-story-btn" onclick="event.preventDefault(); document.getElementById('story')?.scrollIntoView({behavior: 'smooth', block: 'start'});" class="btn btn-primary">See last year's story</a>
+                        <a href="#story" class="btn btn-primary" id="see-story-btn">See last year's story</a>
+
                     </div>
                 </div>
             </div>
         </header>
-
         <section id="story" class="cinematic-hidden">
+            <!-- Rangoli corner fragments: kept behind the section content. -->
+            <div class="story-rangoli-corner story-rangoli-tl" aria-hidden="true">
+                <img src="design2.svg" alt="">
+            </div>
+            <div class="story-rangoli-corner story-rangoli-br" aria-hidden="true">
+                <img src="design2.svg" alt="">
+            </div>
             <div class="wrap">
                 <div class="section-head">
                     <svg class="eyebrow-flower" viewBox="0 0 100 100" data-flower="pink"></svg>
-                    <h2>Our Story</h2>
+                    <h2>OUR STORY</h2>
                     <p>Every memorable story begins small. Ours started with a team of 10, just one day to gather what
                         we needed.</p>
                 </div>
@@ -1213,31 +1967,35 @@
 
                     <div class="fan-gallery-container">
                         <div class="fan-cards-stack" id="fan-stack">
+                            <div class="fan-card" data-index="0">
+                                <div class="card-media photo-frame">
+                                    <img src="./photo1.jpg" alt="Last Onam pookalam" class="fan-photo">
+                                </div>
+                                <span class="card-badge">Day 01</span>
+                                <div class="card-caption">Laying the outer ring</div>
+                                <div class="card-subtext">Day one — seven concentric circles</div>
+                            </div>
                             <div class="fan-card" data-index="1">
                                 <div class="card-media photo-frame">
-                                    <img src="./photo1.jpg" alt="" class="fan-photo">
+                                    <img src="./photo2.jpg" alt="Pookalam flowers after rain" class="fan-photo">
                                 </div>
+                                <span class="card-badge">The Rain</span>
+                                <div class="card-caption">Sorting marigolds after rain</div>
+                                <div class="card-subtext">Hand-sorting every wet petal</div>
                             </div>
                             <div class="fan-card" data-index="2">
                                 <div class="card-media photo-frame">
-                                    <img src="./photo2.jpg" alt="" class="fan-photo">
+                                    <img src="./photo3.jpg" alt="Community arranging flowers" class="fan-photo">
                                 </div>
+                                <span class="card-badge">Terrace Session</span>
+                                <div class="card-caption">Midnight floral mandala</div>
+                                <div class="card-subtext">Neighbors joining till 2 AM</div>
                             </div>
                             <div class="fan-card" data-index="3">
-                                <div class="card-media photo-frame">
-                                    <img src="./photo3.jpg" alt="" class="fan-photo">
-                                </div>
-                            </div>
-                            <div class="fan-card" data-index="4">
                                 <div class="card-media photo-frame">
                                     <img src="./photo4.jpg" alt="" class="fan-photo">
                                 </div>
                             </div>
-                            <!-- <div class="fan-card" data-index="5">
-                                <div class="card-media photo-frame">
-                                    <img src="./photo5.jpg" alt="" class="fan-photo">
-                                </div>
-                            </div> -->
 
 
 
@@ -1245,15 +2003,21 @@
 
                         <div class="fan-controls">
                             <button class="fan-btn" id="fan-prev" aria-label="Previous card">‹</button>
-                            <div class="fan-indicator" id="fan-indicator">1 / 3</div>
+                            <div class="fan-indicator" id="fan-indicator">1 / 4</div>
                             <button class="fan-btn" id="fan-next" aria-label="Next card">›</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
         <section id="give" class="cinematic-hidden">
+            <!-- Rangoli corner fragments: matching OUR STORY background design -->
+            <div class="story-rangoli-corner story-rangoli-tl" aria-hidden="true">
+                <img src="design2.svg" alt="">
+            </div>
+            <div class="story-rangoli-corner story-rangoli-br" aria-hidden="true">
+                <img src="design2.svg" alt="">
+            </div>
             <div class="wrap">
                 <div class="section-head">
                     <svg class="eyebrow-flower" viewBox="0 0 100 100" data-flower="gold"></svg>
@@ -1276,13 +2040,18 @@
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
-                                        <h4>Pookalam Contribution <span class="badge-req">Min ₹30</span></h4>
-                                        <div class="amt-input-wrap" style="display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.4); border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 10px;">
-                                            <span style="color: var(--gold-light); font-weight: 700; font-size: 16px;">₹</span>
-                                            <input type="number" id="pookalam-amt-input" value="30" min="30" step="10" title="Minimum contribution is ₹30" style="width: 70px; background: transparent; border: none; color: var(--gold-light); font-weight: 700; font-size: 16px; font-family: 'Karla', sans-serif; outline: none;">
+                                        <h4>Pookalam Contribution <span class="badge-req">Min&nbsp;₹30</span></h4>
+                                        <div class="amt-input-wrap"
+                                            style="display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.4); border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 10px;">
+                                            <span
+                                                style="color: var(--gold-light); font-weight: 700; font-size: 16px;">₹</span>
+                                            <input type="number" id="pookalam-amt-input" value="30" min="30" step="10"
+                                                title="Minimum contribution is ₹30"
+                                                style="width: 70px; background: transparent; border: none; color: var(--gold-light); font-weight: 700; font-size: 16px; font-family: 'Karla', sans-serif; outline: none;">
                                         </div>
                                     </div>
-                                    <p>Base contribution for flowers & materials. Enter any higher amount if you wish!</p>
+                                    <p>Base contribution for flowers & materials. Enter any higher amount if you wish!
+                                    </p>
                                 </div>
                             </div>
 
@@ -1297,14 +2066,20 @@
                                         <h4>White Mullapoo (Jasmine Strand)</h4>
                                         <span class="option-price" id="price-mullapoo">₹30</span>
                                     </div>
-                                    <p>A strand of fresh jasmine to wear on judging day (preferably for girls & women).</p>
-                                    
-                                    <div class="counter-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
-                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹30 each):</span>
+                                    <p>A strand of fresh jasmine to wear on judging day (preferably for girls & women).
+                                    </p>
+
+                                    <div class="counter-row"
+                                        style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
+                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹30
+                                            each):</span>
                                         <div class="qty-counter" style="display: flex; align-items: center; gap: 8px;">
-                                            <button type="button" class="qty-btn" id="btn-mullapoo-minus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-                                            <span class="qty-count" id="count-mullapoo" style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
-                                            <button type="button" class="qty-btn" id="btn-mullapoo-plus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                                            <button type="button" class="qty-btn" id="btn-mullapoo-minus"
+                                                style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                                            <span class="qty-count" id="count-mullapoo"
+                                                style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
+                                            <button type="button" class="qty-btn" id="btn-mullapoo-plus"
+                                                style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1322,13 +2097,18 @@
                                         <span class="option-price" id="price-payasam">₹40</span>
                                     </div>
                                     <p>A fresh bowl of sweet payasam for you once the pookalam is laid and judged.</p>
-                                    
-                                    <div class="counter-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
-                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹40 each):</span>
+
+                                    <div class="counter-row"
+                                        style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(214, 164, 58, 0.15);">
+                                        <span style="font-size: 13px; color: var(--text-secondary);">Quantity (₹40
+                                            each):</span>
                                         <div class="qty-counter" style="display: flex; align-items: center; gap: 8px;">
-                                            <button type="button" class="qty-btn" id="btn-payasam-minus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-                                            <span class="qty-count" id="count-payasam" style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
-                                            <button type="button" class="qty-btn" id="btn-payasam-plus" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                                            <button type="button" class="qty-btn" id="btn-payasam-minus"
+                                                style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                                            <span class="qty-count" id="count-payasam"
+                                                style="font-weight: 700; font-size: 16px; color: var(--gold-light); min-width: 20px; text-align: center;">0</span>
+                                            <button type="button" class="qty-btn" id="btn-payasam-plus"
+                                                style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold-light); font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1371,43 +2151,68 @@
                                 <div class="upi-id" id="upi-id">9562375372@pthdfc</div>
                             </div>
                             <button class="copy-btn" id="copy-upi">Copy UPI ID</button>
+                        </div>
+                    </div>
+
+                    <!-- Payment Verification Form (Below Cart & QR Section) -->
+                    <div class="payment-verify-container"
+                        style="margin-top: 36px; background: rgba(22, 2, 5, 0.85); border: 1px solid rgba(214, 164, 58, 0.3); border-radius: 24px; padding: 32px 36px; box-shadow: 0 24px 48px rgba(0,0,0,0.5);">
+                        <h3
+                            style="font-family: 'Fraunces', serif; color: var(--gold-light); font-size: 22px; margin-top: 0; margin-bottom: 8px;">
+                            Confirm Your Contribution</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">After scanning
+                            the QR code and completing your payment, enter your details below so we can verify your
+                            contribution.</p>
+
+                        <form id="payment-verify-form"
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                <label for="user-name"
+                                    style="font-weight: 600; font-size: 14px; color: var(--gold-light);">Your Full Name
+                                    <span style="color: var(--gold);">*</span></label>
+                                <input type="text" id="user-name" name="userName" required
+                                    placeholder="Enter your full name"
+                                    style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                            </div>
+
+                            <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                <label for="txn-id"
+                                    style="font-weight: 600; font-size: 14px; color: var(--gold-light);">UPI Transaction
+                                    ID / Ref No. <span style="color: var(--gold);">*</span></label>
+                                <input type="text" id="txn-id" name="txnId" required
+                                    placeholder="12-digit UTR / Ref No. (e.g. 4239xxxxxxxx)"
+                                    style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
+                            </div>
+
+                            <div style="grid-column: 1 / -1; margin-top: 8px;">
+                                <button type="submit" class="btn btn-primary"
+                                    style="width: 100%; padding: 16px; font-size: 17px; cursor: pointer; border: none;">Submit
+                                    Payment Details</button>
+                            </div>
+                            <div id="verify-success-msg"
+                                style="grid-column: 1 / -1; display: none; background: rgba(63, 107, 53, 0.25); border: 1px solid var(--leaf); color: #8ee879; padding: 14px 20px; border-radius: 12px; font-weight: 600; text-align: center; font-size: 15px; margin-top: 8px;">
+                                Thank you! Your payment details have been submitted. We'll verify and see you on judging
+                                day!
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Payment Verification Form (Below Cart & QR Section) -->
-                <div class="payment-verify-container" style="margin-top: 36px; background: rgba(22, 2, 5, 0.85); border: 1px solid rgba(214, 164, 58, 0.3); border-radius: 24px; padding: 32px 36px; box-shadow: 0 24px 48px rgba(0,0,0,0.5);">
-                    <h3 style="font-family: 'Fraunces', serif; color: var(--gold-light); font-size: 22px; margin-top: 0; margin-bottom: 8px;">Confirm Your Contribution</h3>
-                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">After scanning the QR code and completing your payment, enter your details below so we can verify your contribution.</p>
-                    
-                    <form id="payment-verify-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
-                            <label for="user-name" style="font-weight: 600; font-size: 14px; color: var(--gold-light);">Your Full Name <span style="color: var(--gold);">*</span></label>
-                            <input type="text" id="user-name" name="userName" required placeholder="Enter your full name" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
-                        </div>
-
-                        <div class="field-group" style="display: flex; flex-direction: column; gap: 8px;">
-                            <label for="txn-id" style="font-weight: 600; font-size: 14px; color: var(--gold-light);">UPI Transaction ID / Ref No. <span style="color: var(--gold);">*</span></label>
-                            <input type="text" id="txn-id" name="txnId" required placeholder="12-digit UTR / Ref No. (e.g. 4239xxxxxxxx)" style="background: rgba(0, 0, 0, 0.4); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 12px; padding: 14px 18px; color: #ffffff; font-size: 16px; font-family: 'Karla', sans-serif; outline: none; transition: border-color 0.2s ease;">
-                        </div>
-
-                        <div style="grid-column: 1 / -1; margin-top: 8px;">
-                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 17px; cursor: pointer; border: none;">Submit Payment Details</button>
-                        </div>
-                        <div id="verify-success-msg" style="grid-column: 1 / -1; display: none; background: rgba(63, 107, 53, 0.25); border: 1px solid var(--leaf); color: #8ee879; padding: 14px 20px; border-radius: 12px; font-weight: 600; text-align: center; font-size: 15px; margin-top: 8px;">
-                            Thank you! Your payment details have been submitted. We'll verify and see you on judging day!
-                        </div>
-                    </form>
-                </div>
-            </div>
         </section>
-
+        <div class="photo-lightbox" id="photo-lightbox" role="dialog" aria-modal="true"
+            aria-label="Expanded pookalam photo">
+            <div class="lightbox-polaroid">
+                <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close photo">×</button>
+                <img id="lightbox-image" src="" alt="">
+                <div class="lightbox-caption" id="lightbox-caption"></div>
+            </div>
+        </div>
         <footer class="cinematic-hidden">
             <div class="wrap">
                 Made for our Onam pookalam crew. Questions? <a href="mailto:hello@example.com">hello@example.com</a>
             </div>
         </footer>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
         // ================= HERO POOKALAM SVG GENERATOR (from File 1 reference) =================
         const NS = "http://www.w3.org/2000/svg";
@@ -1742,7 +2547,11 @@
             return Math.round((delay + 1.2) * 1000);
         }
 
-        // The hero background is now the real pookalam photo (see #hero-kolam-svg
+        // Render the decorative hero pookalam into the SVG used by the design.
+        const heroKolam = document.getElementById("hero-kolam-svg");
+        if (heroKolam) buildPookalam(heroKolam, { animated: false });
+
+        // The hero uses the generated pookalam SVG (see #hero-kolam-svg
         // <img> in the markup). The continuous rotation comes purely from the
         // .hero-kolam-bg CSS animation, so no JS build step is needed here.
 
@@ -1782,102 +2591,234 @@
         const loader = document.getElementById("loader");
         const cinematicIntro = document.getElementById("cinematic-intro");
         const video = document.getElementById("intro-video");
+        const skipIntro = document.getElementById("skip-intro");
         const cinematicElements = document.querySelectorAll(".cinematic-hidden");
 
-        // Immediate start of the tracking timer on script execution
         const loaderStartTime = performance.now();
-        console.log("Loader started");
-        console.log("MP4 loading...");
+        let introFinished = false;
 
-        // Ensure 5 seconds minimum elapsed time
-        const minTimePromise = new Promise(resolve => {
-            setTimeout(() => {
-                console.log("5 seconds completed");
-                resolve();
-            }, 5000);
-        });
+        function revealWebsite() {
+            if (introFinished) return;
+            introFinished = true;
+            cinematicIntro.classList.add("hide");
+            loader.classList.add("hide");
+            cinematicElements.forEach(el => el.classList.add("cinematic-ready"));
+        }
 
-        // Dedicated promise to detect if video buffer is playable
-        const videoReadyPromise = new Promise((resolve, reject) => {
-            if (video.readyState >= 3) {
-                console.log("MP4 ready");
-                resolve();
-            } else {
-                video.addEventListener('canplay', () => {
-                    console.log("MP4 ready");
-                    resolve();
-                }, { once: true });
-                video.addEventListener('error', (e) => reject(video.error || e), { once: true });
+        function keepIntroVideoPlaying() {
+            if (introFinished || video.ended) return;
+            const promise = video.play();
+            if (promise && typeof promise.catch === "function") {
+                promise.catch(() => {
+                    // Browsers can reject a background-tab play attempt temporarily.
+                    // The next visibility/play event will retry automatically.
+                });
+            }
+        }
+
+        // If the browser pauses/throttles the video when the user changes tabs,
+        // immediately attempt to resume it when playback is allowed again.
+        document.addEventListener("visibilitychange", keepIntroVideoPlaying);
+        window.addEventListener("pageshow", keepIntroVideoPlaying);
+        video.addEventListener("pause", () => {
+            if (!introFinished && !video.ended) {
+                setTimeout(keepIntroVideoPlaying, 50);
             }
         });
 
-        // Graceful reveal of website if the video finishes or fails
-        function revealWebsite() {
-            console.log("Revealing website");
-            if (cinematicIntro) cinematicIntro.classList.add("hide");
-            document.querySelectorAll(".cinematic-hidden").forEach(el => {
-                el.classList.remove("cinematic-hidden");
-                el.classList.add("cinematic-ready");
-            });
+        // User-requested skip control.
+        if (skipIntro) {
+            skipIntro.addEventListener("click", revealWebsite);
         }
+
+        const minTimePromise = new Promise(resolve => {
+            setTimeout(resolve, 5000);
+        });
+
+        const videoReadyPromise = new Promise(resolve => {
+            if (video.readyState >= 3) {
+                resolve();
+            } else {
+                video.addEventListener("canplay", resolve, { once: true });
+                video.addEventListener("error", resolve, { once: true });
+            }
+        });
+
+        video.addEventListener("ended", revealWebsite, { once: true });
 
         async function executeCinematicSequence() {
             try {
-                // Mandatory 5 second wait ALWAYS completes first
                 await minTimePromise;
+                if (introFinished) return;
 
-                // Then ensure video is ready
                 await videoReadyPromise;
+                if (introFinished) return;
 
-                console.log("Attempting video.play()");
+                // Start playback immediately and retry if the browser is briefly busy.
+                keepIntroVideoPlaying();
 
-                // Listen for true playback before clearing the loader
-                const playPromise = new Promise(resolve => {
-                    video.addEventListener('playing', () => {
-                        console.log("MP4 actually playing");
+                // Give the browser a short window to confirm playback.
+                await new Promise(resolve => {
+                    if (!video.paused && video.readyState >= 3) {
                         resolve();
-                    }, { once: true });
+                        return;
+                    }
+
+                    const onPlaying = () => {
+                        cleanup();
+                        resolve();
+                    };
+                    const cleanup = () => video.removeEventListener("playing", onPlaying);
+
+                    video.addEventListener("playing", onPlaying, { once: true });
+                    setTimeout(() => {
+                        cleanup();
+                        resolve();
+                    }, 1200);
                 });
 
-                // Trigger video play
-                video.play().catch(e => { throw e; });
+                if (introFinished) return;
 
-                // Wait until the browser verifies playback has started
-                await playPromise;
-
-                // Safely remove the loader, making the playing MP4 full-screen intro visible
                 loader.classList.add("hide");
-
-                // Wait for the introductory MP4 to naturally end
-                video.addEventListener('ended', () => {
-                    console.log("MP4 ended");
-                    revealWebsite();
-                }, { once: true });
-
+                keepIntroVideoPlaying();
             } catch (error) {
-                // If MP4 throws an error (e.g., file missing, blockplay blocked)
                 console.error("Video error:", error);
-
-                // If we errored out fast, we still guarantee the 5 seconds minimum for the loader
-                const elapsed = performance.now() - loaderStartTime;
-                if (elapsed < 5000) {
-                    await new Promise(r => setTimeout(r, 5000 - elapsed));
-                    console.log("5 seconds completed (error fallback)");
+                if (performance.now() - loaderStartTime < 5000) {
+                    await new Promise(resolve =>
+                        setTimeout(resolve, 5000 - (performance.now() - loaderStartTime))
+                    );
                 }
-
-                // Gracefully fallback: clear loader and cinematic wrapper, reveal website
-                loader.classList.add("hide");
                 revealWebsite();
             }
         }
 
-        // Kick off sequence explicitly and cleanly
         executeCinematicSequence();
+        // ================= FAN GALLERY CAROUSEL =================
+        (function initFanGallery() {
+            const cards = Array.from(document.querySelectorAll('.fan-card'));
+            const prevBtn = document.getElementById('fan-prev');
+            const nextBtn = document.getElementById('fan-next');
+            const indicator = document.getElementById('fan-indicator');
+
+            if (!cards.length) return;
+
+            let currentIndex = 0;
+            const total = cards.length;
+
+            const config = {
+                0: { rotate: 0, x: 0, y: -15, scale: 1.04, zIndex: 10 },
+                1: { rotate: 8, x: 50, y: 10, scale: 0.96, zIndex: 8 },
+                2: { rotate: 16, x: 90, y: 35, scale: 0.88, zIndex: 6 },
+                '-1': { rotate: -8, x: -50, y: 10, scale: 0.96, zIndex: 8 },
+                '-2': { rotate: -16, x: -90, y: 35, scale: 0.88, zIndex: 6 }
+            };
+
+            function render() {
+                cards.forEach((card, i) => {
+                    let diff = i - currentIndex;
+                    if (diff > total / 2) diff -= total;
+                    if (diff < -total / 2) diff += total;
+
+                    const pos = config[diff] || {
+                        rotate: diff * 12, x: diff * 45, y: Math.abs(diff) * 20,
+                        scale: Math.max(0.7, 1 - Math.abs(diff) * 0.08), zIndex: 10 - Math.abs(diff) * 2
+                    };
+
+                    if (window.gsap) {
+                        gsap.to(card, { rotation: pos.rotate, x: pos.x, y: pos.y, scale: pos.scale, zIndex: pos.zIndex, duration: 0.5, ease: "power2.out" });
+                    } else {
+                        card.style.transform = `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotate}deg) scale(${pos.scale})`;
+                        card.style.zIndex = pos.zIndex;
+                    }
+                    if (i === currentIndex) card.classList.add('active');
+                    else card.classList.remove('active');
+                });
+                if (indicator) indicator.textContent = `${currentIndex + 1} / ${total}`;
+            }
+
+            cards.forEach((card, i) => card.addEventListener('click', () => { currentIndex = i; render(); }));
+            if (nextBtn) nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % total; render(); });
+            if (prevBtn) prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + total) % total; render(); });
+            render();
+        })();
+
+        // ================= PHOTO POLAROID LIGHTBOX =================
+        (function initPhotoLightbox() {
+            const lightbox = document.getElementById('photo-lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const closeBtn = document.getElementById('lightbox-close');
+            const photoCards = document.querySelectorAll('.fan-card .photo-frame');
+
+            if (!lightbox || !lightboxImage || !closeBtn || !photoCards.length) return;
+
+            let lastFocused = null;
+
+            function openLightbox(frame) {
+                const img = frame.querySelector('img');
+                if (!img) return;
+
+                lastFocused = document.activeElement;
+                lightboxImage.src = img.currentSrc || img.src;
+                lightboxImage.alt = img.alt || 'Pookalam photo';
+
+                const card = frame.closest('.fan-card');
+                const caption = card?.querySelector('.card-caption');
+                const subtext = card?.querySelector('.card-subtext');
+                lightboxCaption.textContent = caption
+                    ? (subtext ? `${caption.textContent} — ${subtext.textContent}` : caption.textContent)
+                    : '';
+
+                lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                requestAnimationFrame(() => closeBtn.focus());
+            }
+
+            function closeLightbox() {
+                if (!lightbox.classList.contains('open')) return;
+                lightbox.classList.remove('open');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    lightboxImage.src = '';
+                    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+                }, 350);
+            }
+
+            photoCards.forEach(frame => {
+                frame.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    openLightbox(frame);
+                });
+            });
+
+            closeBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                closeLightbox();
+            });
+
+            lightbox.addEventListener('click', (event) => {
+                if (event.target === lightbox) closeLightbox();
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') closeLightbox();
+            });
+        })();
+
+        // Ensure the hero story button performs a smooth, reliable scroll.
+        const storyButton = document.getElementById('see-story-btn');
+        const storySection = document.getElementById('story');
+        if (storyButton && storySection) {
+            storyButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                storySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
 
 
         // ================= CONTRIBUTION CALCULATOR & COUNTERS =================
         const pookalamInput = document.getElementById("pookalam-amt-input");
-        
+
         const checkMullapoo = document.getElementById("check-mullapoo");
         const countMullapoo = document.getElementById("count-mullapoo");
         const priceMullapoo = document.getElementById("price-mullapoo");
@@ -1940,7 +2881,7 @@
         // Pookalam Custom Input Event
         if (pookalamInput) {
             pookalamInput.addEventListener("input", updateCartTotal);
-            pookalamInput.addEventListener("blur", function() {
+            pookalamInput.addEventListener("blur", function () {
                 if (parseInt(this.value, 10) < 30 || isNaN(parseInt(this.value, 10))) {
                     this.value = 30;
                     updateCartTotal();
@@ -1950,7 +2891,7 @@
 
         // Mullapoo Controls
         if (btnMullapooPlus) {
-            btnMullapooPlus.addEventListener("click", function(e) {
+            btnMullapooPlus.addEventListener("click", function (e) {
                 e.preventDefault();
                 mullapooQty++;
                 if (checkMullapoo) checkMullapoo.checked = true;
@@ -1958,7 +2899,7 @@
             });
         }
         if (btnMullapooMinus) {
-            btnMullapooMinus.addEventListener("click", function(e) {
+            btnMullapooMinus.addEventListener("click", function (e) {
                 e.preventDefault();
                 if (mullapooQty > 1) {
                     mullapooQty--;
@@ -1970,7 +2911,7 @@
             });
         }
         if (checkMullapoo) {
-            checkMullapoo.addEventListener("change", function() {
+            checkMullapoo.addEventListener("change", function () {
                 if (this.checked && mullapooQty === 0) mullapooQty = 1;
                 if (!this.checked) mullapooQty = 0;
                 updateCartTotal();
@@ -1979,7 +2920,7 @@
 
         // Payasam Controls
         if (btnPayasamPlus) {
-            btnPayasamPlus.addEventListener("click", function(e) {
+            btnPayasamPlus.addEventListener("click", function (e) {
                 e.preventDefault();
                 payasamQty++;
                 if (checkPayasam) checkPayasam.checked = true;
@@ -1987,7 +2928,7 @@
             });
         }
         if (btnPayasamMinus) {
-            btnPayasamMinus.addEventListener("click", function(e) {
+            btnPayasamMinus.addEventListener("click", function (e) {
                 e.preventDefault();
                 if (payasamQty > 1) {
                     payasamQty--;
@@ -1999,7 +2940,7 @@
             });
         }
         if (checkPayasam) {
-            checkPayasam.addEventListener("change", function() {
+            checkPayasam.addEventListener("change", function () {
                 if (this.checked && payasamQty === 0) payasamQty = 1;
                 if (!this.checked) payasamQty = 0;
                 updateCartTotal();
@@ -2075,106 +3016,7 @@
             });
         }
 
-        // ================= UI INTERACTIONS (WITH SAFE NULL CHECKS) =================
-        const signupForm = document.getElementById("signup-form");
-        if (signupForm) {
-            signupForm.addEventListener("submit", function (e) {
-                e.preventDefault();
-                document.getElementById("signup-msg")?.classList.add("show");
-                this.querySelector("button[type=submit]").textContent = "Thanks, you're on the list!";
-            });
-        }
 
-        const amountBtns = document.querySelectorAll(".amt");
-        const customInput = document.getElementById("custom-amt");
-        if (amountBtns.length) {
-            amountBtns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    amountBtns.forEach(b => b.classList.remove("selected"));
-                    btn.classList.add("selected");
-                    if (customInput) customInput.value = "";
-                });
-            });
-        }
-        if (customInput) {
-            customInput.addEventListener("input", () => {
-                amountBtns.forEach(b => b.classList.remove("selected"));
-            });
-        }
-
-        const copyUpi = document.getElementById("copy-upi");
-        if (copyUpi) {
-            copyUpi.addEventListener("click", function () {
-                const id = document.getElementById("upi-id")?.textContent || '';
-                navigator.clipboard?.writeText(id).then(() => {
-                    this.textContent = "Copied!";
-                    setTimeout(() => { this.textContent = "Copy UPI ID"; }, 2000);
-                });
-            });
-        }
-
-        // ================= SMOOTH ANCHOR SCROLLING =================
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const targetId = this.getAttribute('href');
-                if (targetId && targetId !== '#') {
-                    const targetEl = document.querySelector(targetId);
-                    if (targetEl) {
-                        e.preventDefault();
-                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-        });
-
-        // ================= FAN GALLERY CAROUSEL =================
-        (function initFanGallery() {
-            const cards = Array.from(document.querySelectorAll('.fan-card'));
-            const prevBtn = document.getElementById('fan-prev');
-            const nextBtn = document.getElementById('fan-next');
-            const indicator = document.getElementById('fan-indicator');
-
-            if (!cards.length) return;
-
-            let currentIndex = 0;
-            const total = cards.length;
-
-            const config = {
-                0: { rotate: 0, x: 0, y: -15, scale: 1.04, zIndex: 10 },
-                1: { rotate: 8, x: 50, y: 10, scale: 0.96, zIndex: 8 },
-                2: { rotate: 16, x: 90, y: 35, scale: 0.88, zIndex: 6 },
-                '-1': { rotate: -8, x: -50, y: 10, scale: 0.96, zIndex: 8 },
-                '-2': { rotate: -16, x: -90, y: 35, scale: 0.88, zIndex: 6 }
-            };
-
-            function render() {
-                cards.forEach((card, i) => {
-                    let diff = i - currentIndex;
-                    if (diff > total / 2) diff -= total;
-                    if (diff < -total / 2) diff += total;
-
-                    const pos = config[diff] || {
-                        rotate: diff * 12, x: diff * 45, y: Math.abs(diff) * 20,
-                        scale: Math.max(0.7, 1 - Math.abs(diff) * 0.08), zIndex: 10 - Math.abs(diff) * 2
-                    };
-
-                    if (window.gsap) {
-                        gsap.to(card, { rotation: pos.rotate, x: pos.x, y: pos.y, scale: pos.scale, zIndex: pos.zIndex, duration: 0.5, ease: "power2.out" });
-                    } else {
-                        card.style.transform = `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotate}deg) scale(${pos.scale})`;
-                        card.style.zIndex = pos.zIndex;
-                    }
-                    if (i === currentIndex) card.classList.add('active');
-                    else card.classList.remove('active');
-                });
-                if (indicator) indicator.textContent = `${currentIndex + 1} / ${total}`;
-            }
-
-            cards.forEach((card, i) => card.addEventListener('click', () => { currentIndex = i; render(); }));
-            if (nextBtn) nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % total; render(); });
-            if (prevBtn) prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + total) % total; render(); });
-            render();
-        })();
     </script>
 </body>
 
