@@ -72,6 +72,10 @@ app.post('/api/submit', async (req, res) => {
         console.log(`[${timestamp}] Recorded contribution from: ${name} (Txn: ${transactionId}) - Total: ₹${totalAmount}`);
         return res.json({ success: true, message: 'Contribution recorded in Excel successfully!' });
     } catch (error) {
+        if (error.code === 'EBUSY') {
+            console.error('\n❌ ERROR: Cannot write to Excel file because it is open in another program (like Microsoft Excel). Please close the file and try again.\n');
+            return res.status(500).json({ success: false, message: 'Excel file is currently open. Please close it and try again.' });
+        }
         console.error('Error logging to Excel:', error);
         return res.status(500).json({ success: false, message: 'Failed to record contribution in Excel.' });
     }
