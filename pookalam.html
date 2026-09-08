@@ -824,35 +824,157 @@
             border: 1px solid rgba(214, 164, 58, 0.2);
         }
 
-        .amounts {
+        /* ================= CONTRIBUTIONS & CHECKBOXES ================= */
+        .give-options-card {
+            background: rgba(22, 2, 5, 0.8);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(214, 164, 58, 0.2);
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
             margin-bottom: 24px;
         }
 
-        .amt {
-            flex: 1;
-            min-width: 80px;
-            padding: 14px 16px;
-            border: 1px solid rgba(214, 164, 58, 0.3);
-            border-radius: 12px;
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
             background: rgba(0, 0, 0, 0.3);
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--cream);
+            border: 1.5px solid rgba(214, 164, 58, 0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            border-color: var(--gold);
+            background: rgba(214, 164, 58, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .option-item.checked {
+            border-color: var(--gold);
+            background: rgba(214, 164, 58, 0.15);
+            box-shadow: 0 4px 16px rgba(214, 164, 58, 0.15);
+        }
+
+        .option-item.disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        .option-checkbox {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            margin-top: 2px;
+        }
+
+        .option-checkbox input[type="checkbox"] {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid var(--gold);
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-weight: bold;
+            font-size: 14px;
             transition: all 0.2s ease;
         }
 
-        .amt:hover {
-            border-color: var(--gold);
-            background: rgba(214, 164, 58, 0.1);
-        }
-
-        .amt.selected {
+        .option-item.checked .checkmark {
             background: var(--gold);
             color: var(--maroon-deep);
-            border-color: transparent;
+        }
+
+        .option-info {
+            flex: 1;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .option-header h4 {
+            margin: 0;
+            font-size: 17px;
+            color: var(--gold-light);
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+        }
+
+        .badge-req {
+            font-size: 11px;
+            font-family: 'Karla', sans-serif;
+            background: rgba(214, 164, 58, 0.2);
+            color: var(--gold);
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .option-price {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--gold);
+        }
+
+        .option-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .total-bar {
+            background: rgba(214, 164, 58, 0.12);
+            border: 1.5px solid var(--gold);
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--cream);
+            font-family: 'Fraunces', serif;
+        }
+
+        .total-amount {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--gold-light);
+            letter-spacing: -0.02em;
         }
 
         .custom-row {
@@ -1121,56 +1243,84 @@
             <div class="wrap">
                 <div class="section-head">
                     <svg class="eyebrow-flower" viewBox="0 0 100 100" data-flower="gold"></svg>
-                    <h2>Chip in for the flowers</h2>
-                    <p>Marigold, jasmine, banana leaves, and colour powders add up fast — ₹50 or whatever you can spare
-                        goes straight into this year's pookalam.</p>
+                    <h2>Chip in for the flowers & treats</h2>
+                    <p>Select your contribution items below to calculate your total and scan to pay via UPI.</p>
                 </div>
                 <div class="give-grid">
-                    <div>
-                        <p style="color:var(--gold-light); font-size: 18px; font-weight: 500;">Everyone who contributes
-                            gets a small thank-you:</p>
-                        <div class="rewards">
-                            <div class="reward">
-                                <div class="icon"><svg viewBox="0 0 100 100" data-flower="jasmine"></svg></div>
-                                <div>
-                                    <h3>White mullapoo, for girls and women</h3>
-                                    <p>A strand of fresh jasmine to wear, ready for you to collect on judging day.</p>
+                    <!-- Left Column: Interactive Checkboxes -->
+                    <div class="give-options-card">
+                        <h3 style="color:var(--gold-light); font-size: 20px; font-weight: 600; margin-bottom: 20px; font-family: 'Fraunces', serif;">Select items & contribution:</h3>
+                        
+                        <div class="option-list">
+                            <!-- Item 1: Pookalam Minimum Contribution -->
+                            <label class="option-item checked disabled">
+                                <div class="option-checkbox">
+                                    <input type="checkbox" class="contrib-check" data-price="30" checked disabled>
+                                    <span class="checkmark">✓</span>
                                 </div>
-                            </div>
+                                <div class="option-info">
+                                    <div class="option-header">
+                                        <h4>Pookalam Contribution <span class="badge-req">Minimum</span></h4>
+                                        <span class="option-price">₹30</span>
+                                    </div>
+                                    <p>Base contribution for sourcing marigolds, leaves & colors for our pookalam.</p>
+                                </div>
+                            </label>
+
+                            <!-- Item 2: White Mullapoo -->
+                            <label class="option-item">
+                                <div class="option-checkbox">
+                                    <input type="checkbox" class="contrib-check" data-price="30">
+                                    <span class="checkmark">✓</span>
+                                </div>
+                                <div class="option-info">
+                                    <div class="option-header">
+                                        <h4>White Mullapoo (Jasmine Strand)</h4>
+                                        <span class="option-price">₹30</span>
+                                    </div>
+                                    <p>A strand of fresh jasmine to wear, ready on judging day (preferably for girls & women).</p>
+                                </div>
+                            </label>
+
+                            <!-- Item 3: Payasam -->
+                            <label class="option-item">
+                                <div class="option-checkbox">
+                                    <input type="checkbox" class="contrib-check" data-price="40">
+                                    <span class="checkmark">✓</span>
+                                </div>
+                                <div class="option-info">
+                                    <div class="option-header">
+                                        <h4>Bowl of Payasam</h4>
+                                        <span class="option-price">₹40</span>
+                                    </div>
+                                    <p>A fresh bowl of sweet payasam for you once the pookalam is laid and judged.</p>
+                                </div>
+                            </label>
                         </div>
-                        <div class="reward">
-                            <div class="icon">
-                                <svg viewBox="0 0 100 100" fill="none">
-                                    <path d="M22 46 Q50 40 78 46 L72 66 Q50 74 28 66 Z" fill="var(--gold-light)" />
-                                    <ellipse cx="50" cy="46" rx="28" ry="7" fill="var(--gold-light)" />
-                                    <path d="M46 24 Q50 18 54 24 Q50 28 46 24Z" fill="var(--marigold)" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3>Payasam for everyone who contributes</h3>
-                                <p>A bowl for you, whoever you are, once the pookalam is laid and judged.</p>
-                            </div>
+
+                        <!-- Live Total Display -->
+                        <div class="total-bar">
+                            <span class="total-label">Total to Pay:</span>
+                            <span class="total-amount" id="total-amount-display">₹30</span>
                         </div>
                     </div>
-                    <div class="give-card"
-                        style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 36px 28px;">
-                        <h3
-                            style="font-family: 'Fraunces', serif; font-size: 24px; color: var(--gold-light); margin: 0;">
-                            Scan & Contribute</h3>
-                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Scan using GPay, PhonePe,
-                            Paytm, or any UPI App</p>
 
-                        <div class="qr-wrapper"
-                            style="background: #ffffff; padding: 14px; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 12px 32px rgba(0,0,0,0.4); margin: 8px 0;">
-                            <img src="qr-code.png" alt="Scan to pay via UPI"
-                                style="width: 220px; height: 220px; display: block; border-radius: 10px; object-fit: contain;">
+                    <!-- Right Column: QR Code Card -->
+                    <div class="give-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 36px 28px;">
+                        <h3 style="font-family: 'Fraunces', serif; font-size: 24px; color: var(--gold-light); margin: 0;">Scan & Pay</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Scan using GPay, PhonePe, Paytm, or any UPI App</p>
+                        
+                        <div class="qr-wrapper" style="background: #ffffff; padding: 14px; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 12px 32px rgba(0,0,0,0.4); margin: 4px 0;">
+                            <img src="qr-code.png" alt="Scan to pay via UPI" style="width: 210px; height: 210px; display: block; border-radius: 10px; object-fit: contain;">
+                        </div>
+
+                        <div class="total-summary-badge" style="background: rgba(214, 164, 58, 0.15); border: 1px solid var(--gold); padding: 8px 18px; border-radius: 999px; font-weight: 700; color: var(--gold-light); font-size: 15px;">
+                            Amount to enter: <span id="summary-amount" style="color:#ffffff; font-weight: 800;">₹30</span>
                         </div>
 
                         <div class="upi-box" style="width: 100%; margin-top: 4px;">
                             <div>
-                                <div
-                                    style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; font-weight:600;">
-                                    Pay by UPI to</div>
+                                <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; font-weight:600;">Pay by UPI to</div>
                                 <div class="upi-id" id="upi-id">9562375372@pthdfc</div>
                             </div>
                             <button class="copy-btn" id="copy-upi">Copy UPI ID</button>
@@ -1650,6 +1800,31 @@
         // Kick off sequence explicitly and cleanly
         executeCinematicSequence();
 
+
+        // ================= CONTRIBUTION CALCULATOR =================
+        const contribChecks = document.querySelectorAll('.contrib-check');
+        const totalDisplay = document.getElementById('total-amount-display');
+        const summaryAmount = document.getElementById('summary-amount');
+
+        function updateTotal() {
+            let total = 0;
+            contribChecks.forEach(check => {
+                const item = check.closest('.option-item');
+                if (check.checked) {
+                    total += parseInt(check.dataset.price || '0', 10);
+                    item?.classList.add('checked');
+                } else {
+                    item?.classList.remove('checked');
+                }
+            });
+            if (totalDisplay) totalDisplay.textContent = `₹${total}`;
+            if (summaryAmount) summaryAmount.textContent = `₹${total}`;
+        }
+
+        contribChecks.forEach(check => {
+            check.addEventListener('change', updateTotal);
+        });
+        updateTotal();
 
         // ================= UI INTERACTIONS (WITH SAFE NULL CHECKS) =================
         const signupForm = document.getElementById("signup-form");
