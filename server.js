@@ -67,7 +67,7 @@ app.post('/api/submit', async (req, res) => {
             String(transactionId).trim(),
             Number(payasamCount || 0),
             Number(mullapooCount || 0),
-            Number(pookalamAmount || 30),
+            Number(pookalamAmount !== undefined && pookalamAmount !== null ? pookalamAmount : 0),
             Number(totalAmount || 0)
         ]);
 

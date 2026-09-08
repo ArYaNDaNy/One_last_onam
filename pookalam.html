@@ -2031,26 +2031,38 @@
                             style="color:var(--gold-light); font-size: 20px; font-weight: 600; margin-bottom: 20px; font-family: 'Fraunces', serif;">
                             Select items & contribution:</h3>
 
+                        <!-- Department Information Callouts -->
+                        <div class="dept-notice-banner" style="margin-bottom: 22px; padding: 16px 20px; background: rgba(214, 164, 58, 0.08); border: 1.5px solid rgba(214, 164, 58, 0.3); border-radius: 16px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--gold-light);">
+                                <span style="font-size: 18px;">✨</span>
+                                <span><strong style="color: #ffffff;">Payasam &amp; Mullapoo:</strong> Open for <strong>all departments</strong>!</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--cream-muted); border-top: 1px solid rgba(214, 164, 58, 0.15); padding-top: 8px;">
+                                <span style="font-size: 18px;">🌸</span>
+                                <span>If you are from the <strong>Comps Department</strong>, please contribute towards our Pookalam!</span>
+                            </div>
+                        </div>
+
                         <div class="option-list">
-                            <!-- Item 1: Pookalam Contribution (Minimum ₹30 with Custom Input) -->
-                            <div class="option-item checked disabled" id="item-pookalam">
+                            <!-- Item 1: Pookalam Contribution (Flexible, Min ₹20 if contributing) -->
+                            <div class="option-item checked" id="item-pookalam">
                                 <div class="option-checkbox">
-                                    <input type="checkbox" checked disabled>
+                                    <input type="checkbox" id="check-pookalam" checked>
                                     <span class="checkmark">✓</span>
                                 </div>
                                 <div class="option-info">
                                     <div class="option-header">
-                                        <h4>Pookalam Contribution <span class="badge-req">Min&nbsp;₹30</span></h4>
-                                        <div class="amt-input-wrap"
-                                            style="display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.4); border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 10px;">
+                                        <h4>Pookalam Contribution <span class="badge-req">Min&nbsp;₹20</span></h4>
+                                        <div class="amt-input-wrap" id="pookalam-amt-wrap"
+                                            style="display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.4); border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 10px; transition: opacity 0.2s ease;">
                                             <span
                                                 style="color: var(--gold-light); font-weight: 700; font-size: 16px;">₹</span>
-                                            <input type="number" id="pookalam-amt-input" value="30" min="30" step="10"
-                                                title="Minimum contribution is ₹30"
+                                            <input type="number" id="pookalam-amt-input" value="20" min="20" step="10"
+                                                title="Minimum contribution is ₹20"
                                                 style="width: 70px; background: transparent; border: none; color: var(--gold-light); font-weight: 700; font-size: 16px; font-family: 'Karla', sans-serif; outline: none;">
                                         </div>
                                     </div>
-                                    <p>Base contribution for flowers & materials. Enter any higher amount if you wish!
+                                    <p>Base contribution for flowers &amp; materials (Comps Dept — Min ₹20, enter any higher amount if you wish!). Uncheck if only ordering treats.
                                     </p>
                                 </div>
                             </div>
@@ -2817,7 +2829,10 @@
 
 
         // ================= CONTRIBUTION CALCULATOR & COUNTERS =================
+        const checkPookalam = document.getElementById("check-pookalam");
+        const itemPookalam = document.getElementById("item-pookalam");
         const pookalamInput = document.getElementById("pookalam-amt-input");
+        const pookalamAmtWrap = document.getElementById("pookalam-amt-wrap");
 
         const checkMullapoo = document.getElementById("check-mullapoo");
         const countMullapoo = document.getElementById("count-mullapoo");
@@ -2840,10 +2855,19 @@
         let payasamQty = 0;
 
         function updateCartTotal() {
-            // Pookalam base contribution (min 30)
-            let pookalamAmt = parseInt(pookalamInput?.value || "30", 10);
-            if (isNaN(pookalamAmt) || pookalamAmt < 30) {
-                pookalamAmt = 30;
+            // Pookalam contribution (min ₹20 if checked, ₹0 if unchecked)
+            let pookalamAmt = 0;
+            if (checkPookalam && checkPookalam.checked) {
+                itemPookalam?.classList.add("checked");
+                if (pookalamAmtWrap) pookalamAmtWrap.style.opacity = "1";
+                if (pookalamInput) pookalamInput.disabled = false;
+                let val = parseInt(pookalamInput?.value || "20", 10);
+                pookalamAmt = (isNaN(val) || val < 20) ? 20 : val;
+            } else {
+                itemPookalam?.classList.remove("checked");
+                if (pookalamAmtWrap) pookalamAmtWrap.style.opacity = "0.4";
+                if (pookalamInput) pookalamInput.disabled = true;
+                pookalamAmt = 0;
             }
 
             // Mullapoo
@@ -2878,12 +2902,15 @@
             if (summaryAmount) summaryAmount.textContent = `₹${grandTotal}`;
         }
 
-        // Pookalam Custom Input Event
+        // Pookalam Checkbox & Custom Input Events
+        if (checkPookalam) {
+            checkPookalam.addEventListener("change", updateCartTotal);
+        }
         if (pookalamInput) {
             pookalamInput.addEventListener("input", updateCartTotal);
             pookalamInput.addEventListener("blur", function () {
-                if (parseInt(this.value, 10) < 30 || isNaN(parseInt(this.value, 10))) {
-                    this.value = 30;
+                if (parseInt(this.value, 10) < 20 || isNaN(parseInt(this.value, 10))) {
+                    this.value = 20;
                     updateCartTotal();
                 }
             });
@@ -2960,9 +2987,17 @@
                 const nameInput = document.getElementById("user-name");
                 const txnInput = document.getElementById("txn-id");
 
-                const pookalamAmtRaw = parseInt(document.getElementById("pookalam-amt-input")?.value || "30", 10);
-                const pookalamAmt = (isNaN(pookalamAmtRaw) || pookalamAmtRaw < 30) ? 30 : pookalamAmtRaw;
+                let pookalamAmt = 0;
+                if (checkPookalam && checkPookalam.checked) {
+                    const pookalamAmtRaw = parseInt(document.getElementById("pookalam-amt-input")?.value || "20", 10);
+                    pookalamAmt = (isNaN(pookalamAmtRaw) || pookalamAmtRaw < 20) ? 20 : pookalamAmtRaw;
+                }
                 const grandTotal = pookalamAmt + (mullapooQty * 30) + (payasamQty * 40);
+
+                if (grandTotal <= 0) {
+                    alert("Please select at least one contribution item before submitting payment details.");
+                    return;
+                }
 
                 const payload = {
                     name: nameInput ? nameInput.value.trim() : "",
